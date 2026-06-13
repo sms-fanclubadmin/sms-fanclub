@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMS Fan Club – Der exklusive Mitgliederbereich</title>
+<meta name="description" content="Der offizielle Fan Club der SMS Spedition Management Service GmbH. Exklusive Rabatte bei Partnern, Original SMS-Merch und mehr.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Farben aus dem SMS-Stift */
+  --orange:        #FF6B1A;       /* Hauptfarbe Orange */
+  --orange-dark:   #E5570F;
+  --orange-light:  #FF8838;
+  --green:         #1FAF3D;       /* Hauptfarbe Grün */
+  --green-dark:    #157A28;
+  --green-darker:  #0E521B;       /* für Footer */
+  --green-light:   #2FCC52;
+
+  /* Akzente Logo */
+  --logo-red:      #E92020;
+  --logo-orange:   #F58220;
+  --logo-yellow:   #FFCC00;
+
+  /* Neutral */
+  --white:         #FFFFFF;
+  --cream:         #FFF5E8;
+  --text:          #1F0E03;
+  --text-light:    #5C3818;
+  --text-muted:    #8A6A45;
+
+  /* UI */
+  --radius:        14px;
+  --radius-sm:     8px;
+  --radius-lg:     20px;
+  --shadow-sm:     0 2px 8px rgba(31,14,3,.10);
+  --shadow:        0 8px 24px rgba(31,14,3,.18);
+  --shadow-lg:     0 16px 40px rgba(31,14,3,.22);
+  --shadow-green:  0 8px 24px rgba(31,175,61,.30);
+
+  --font:          'Inter', system-ui, -apple-system, sans-serif;
+  --font-display:  'Bebas Neue', 'Anton', 'Impact', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--orange);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============ Topbar ============ */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 36px; background: var(--white);
+  border-bottom: 4px solid var(--green); position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.brand { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.brand-logo { width: 150px; flex-shrink: 0; }
+.brand-logo svg { display: block; width: 100%; height: auto; }
+.brand-text {
+  display: flex; flex-direction: column; line-height: 1.05;
+  padding-left: 14px; border-left: 3px solid var(--green);
+}
+.brand-text strong { font-family: var(--font-display); font-size: 24px; letter-spacing: 2px; color: var(--text); }
+.brand-text span { color: var(--orange); font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
+
+.topnav { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.topnav button {
+  background: none; border: none; color: var(--text); padding: 10px 16px;
+  border-radius: var(--radius-sm); font-weight: 700; font-size: 14px;
+  cursor: pointer; font-family: inherit; transition: all .15s ease;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.topnav button:hover { color: var(--green); }
+.topnav button.active {
+  background: var(--green); color: var(--white);
+  box-shadow: var(--shadow-green);
+}
+.topnav button.cta {
+  background: var(--green); color: var(--white); margin-left: 8px;
+}
+.topnav button.cta:hover { background: var(--green-dark); color: var(--white); }
+
+/* ============ Container ============ */
+.container { max-width: 1200px; margin: 0 auto; padding: 48px 36px; }
+.container-narrow { max-width: 520px; margin: 0 auto; padding: 48px 24px; }
+
+/* ============ Hero ============ */
+.hero {
+  position: relative; padding: 80px 36px 60px; text-align: center; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 10px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green) 50%, var(--white) 50%, var(--white) 100%);
+}
+.brand-logo-large {
+  display: block; margin: 0 auto 28px;
+  width: 380px; max-width: 90%;
+  filter: drop-shadow(0 4px 12px rgba(31,14,3,.25));
+}
+.brand-logo-large svg {
+  display: block; width: 100%; height: auto;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(56px, 9vw, 110px);
+  letter-spacing: 3px; line-height: .95; margin-bottom: 20px;
+  color: var(--white); text-shadow: 4px 4px 0 rgba(31,14,3,.35);
+}
+.hero h1 .green { color: var(--green); text-shadow: 4px 4px 0 var(--white); display: inline-block; }
+.hero p.lead {
+  font-size: 19px; color: var(--white); max-width: 640px; margin: 0 auto 32px;
+  font-weight: 500; line-height: 1.5; text-shadow: 1px 1px 0 rgba(31,14,3,.2);
+}
+.hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ============ Buttons ============ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--green); color: var(--white); border: none;
+  border-radius: var(--radius-sm); padding: 15px 28px; font-size: 14px;
+  font-weight: 800; font-family: inherit; text-transform: uppercase;
+  letter-spacing: 1.5px; cursor: pointer; text-decoration: none;
+  transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow: var(--shadow-green);
+}
+.btn:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(31,175,61,.4); }
+.btn:active { transform: translateY(0); }
+.btn.btn-block { width: 100%; }
+.btn.btn-white { background: var(--white); color: var(--green-dark); box-shadow: var(--shadow); }
+.btn.btn-white:hover { background: var(--cream); }
+.btn.btn-outline {
+  background: transparent; color: var(--white); border: 2px solid var(--white);
+  box-shadow: none;
+}
+.btn.btn-outline:hover { background: var(--white); color: var(--green-dark); }
+.btn.btn-orange { background: var(--orange); color: var(--white); box-shadow: 0 8px 24px rgba(255,107,26,.4); }
+.btn.btn-orange:hover { background: var(--orange-dark); }
+.btn.btn-danger  { background: #C81E1E; box-shadow: 0 8px 24px rgba(200,30,30,.3); }
+.btn.btn-danger:hover { background: #A01010; }
+.btn.btn-sm { padding: 8px 16px; font-size: 12px; }
+
+/* ============ Sections ============ */
+.section-green {
+  background: var(--green);
+  color: var(--white);
+  padding: 80px 36px;
+  position: relative;
+}
+.section-green::before, .section-green::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, var(--orange) 0%, var(--orange) 33%, var(--logo-yellow) 33%, var(--logo-yellow) 66%, var(--white) 66%, var(--white) 100%);
+}
+.section-green::before { top: 0; }
+.section-green::after { bottom: 0; }
+.section-green h2 {
+  font-family: var(--font-display); font-size: clamp(36px, 5vw, 56px); letter-spacing: 2px;
+  text-align: center; color: var(--white); margin-bottom: 14px;
+}
+.section-green .section-sub {
+  text-align: center; font-size: 17px; color: rgba(255,255,255,.92);
+  max-width: 600px; margin: 0 auto 50px;
+}
+
+.section-orange-dark {
+  background: var(--orange-dark);
+  padding: 80px 36px;
+}
+
+.section-title {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 64px);
+  letter-spacing: 2px; text-align: center; color: var(--text); margin-bottom: 12px;
+}
+.section-sub {
+  text-align: center; font-size: 16px; color: var(--text-light);
+  max-width: 600px; margin: 0 auto 48px; line-height: 1.5;
+}
+
+/* ============ Cards ============ */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 800px) { .grid-3 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 32px 28px; box-shadow: var(--shadow);
+  border-top: 6px solid var(--green);
+  position: relative; transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.card h2 {
+  font-family: var(--font-display); font-size: 28px; letter-spacing: 1.5px;
+  margin-bottom: 14px; color: var(--text);
+}
+.card h3 {
+  font-family: var(--font-display); font-size: 22px; letter-spacing: 1.5px;
+  margin-bottom: 10px; color: var(--text);
+}
+.card p { color: var(--text-light); line-height: 1.6; font-size: 15px; }
+.card-icon {
+  font-size: 56px; line-height: 1; margin-bottom: 18px; display: block;
+}
+
+.card.card-green {
+  background: var(--green); color: var(--white);
+  border-top: 6px solid var(--orange);
+}
+.card.card-green h2, .card.card-green h3 { color: var(--white); }
+.card.card-green p { color: rgba(255,255,255,.9); }
+
+/* ============ Hero stats ============ */
+.usp-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  max-width: 800px; margin: 50px auto 0;
+}
+@media (max-width: 700px) { .usp-row { grid-template-columns: 1fr; } }
+.usp { text-align: center; color: var(--white); }
+.usp .num {
+  font-family: var(--font-display); font-size: 56px;
+  color: var(--white); letter-spacing: 1px; line-height: 1;
+}
+.usp .label {
+  font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+  font-weight: 700; color: rgba(255,255,255,.92); margin-top: 8px;
+}
+
+/* ============ Locked Banner ============ */
+.locked-banner {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 48px 32px;
+  text-align: center;
+  margin-bottom: 48px;
+  box-shadow: var(--shadow-lg);
+  border-left: 8px solid var(--green);
+  border-right: 8px solid var(--orange);
+}
+.lock-icon {
+  font-size: 64px; line-height: 1; margin-bottom: 16px; display: block;
+  filter: drop-shadow(0 4px 8px rgba(31,14,3,.2));
+}
+.locked-banner h3 {
+  font-family: var(--font-display); font-size: 38px; letter-spacing: 2px;
+  margin-bottom: 12px; color: var(--text);
+}
+.locked-banner p { color: var(--text-light); font-size: 16px; max-width: 540px; margin: 0 auto 24px; line-height: 1.6; }
+
+/* ============ Forms ============ */
+.form-row { margin-bottom: 18px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+label {
+  display: block; font-weight: 700; font-size: 12px; color: var(--text);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+}
+input, select, textarea {
+  width: 100%; background: var(--cream); color: var(--text); border: 2px solid var(--cream);
+  border-radius: var(--radius-sm); padding: 13px 16px; font-size: 15px;
+  font-family: inherit; font-weight: 500;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--green); background: var(--white);
+  box-shadow: 0 0 0 4px rgba(31,175,61,.18);
+}
+input::placeholder { color: #B89A6E; }
+
+/* ============ Alerts ============ */
+.alert {
+  padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 22px;
+  font-size: 14px; display: none; font-weight: 600;
+}
+.alert.show { display: block; }
+.alert.success { background: rgba(31,175,61,.15); color: var(--green-darker); border-left: 4px solid var(--green); }
+.alert.error   { background: rgba(200,30,30,.10); color: #8A1F1F; border-left: 4px solid #C81E1E; }
+.alert.info    { background: rgba(255,107,26,.12); color: var(--orange-dark); border-left: 4px solid var(--orange); }
+
+/* ============ Merch ============ */
+.merch-card {
+  background: var(--white); border-radius: var(--radius); padding: 24px;
+  display: flex; flex-direction: column;
+  border-bottom: 4px solid var(--green);
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.merch-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-bottom-color: var(--orange); }
+.merch-emoji {
+  font-size: 80px; text-align: center; padding: 28px 0;
+  background: linear-gradient(135deg, rgba(31,175,61,.12), rgba(255,107,26,.15));
+  border-radius: var(--radius-sm); margin-bottom: 16px;
+}
+.merch-card h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: 1.5px; margin-bottom: 6px; }
+.merch-card .desc { color: var(--text-light); font-size: 14px; flex-grow: 1; margin-bottom: 16px; line-height: 1.5; }
+.merch-card .price-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+.merch-card .price {
+  font-family: var(--font-display); font-size: 32px;
+  color: var(--green-dark); letter-spacing: 1px;
+}
+.merch-card .stock { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.merch-card .category-tag {
+  display: inline-block; background: rgba(31,175,61,.15); color: var(--green-darker);
+  font-size: 11px; padding: 4px 10px; border-radius: 999px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+}
+
+/* ============ Codes ============ */
+.code-card {
+  background: var(--white); border-radius: var(--radius); padding: 24px;
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+  box-shadow: var(--shadow);
+  border-left: 6px solid var(--green);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.code-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.code-card h3 { font-size: 19px; margin-bottom: 8px; color: var(--text); font-weight: 800; }
+.partner-discount {
+  font-family: var(--font-display); font-size: 28px;
+  color: var(--orange); letter-spacing: 1px; margin-bottom: 12px;
+}
+.code-card p.desc { color: var(--text-light); font-size: 14px; margin-bottom: 18px; flex-grow: 1; line-height: 1.5; }
+.code-box {
+  background: var(--green-darker);
+  border: 2px dashed var(--logo-yellow);
+  border-radius: var(--radius-sm); padding: 14px;
+  font-family: 'Courier New', monospace; font-size: 18px;
+  font-weight: bold; letter-spacing: 3px; color: var(--logo-yellow);
+  text-align: center; cursor: pointer; transition: background .15s, transform .15s;
+  text-transform: uppercase;
+}
+.code-box:hover { background: #0A3D14; transform: scale(1.02); }
+.partner-link {
+  color: var(--green-dark); font-size: 13px; text-decoration: none;
+  margin-top: 12px; display: inline-block; font-weight: 700;
+}
+.partner-link:hover { text-decoration: underline; }
+.code-tag {
+  display: inline-block; background: rgba(255,107,26,.15); color: var(--orange-dark);
+  font-size: 11px; padding: 4px 10px; border-radius: 999px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+}
+
+/* ============ Pills ============ */
+.pill {
+  display: inline-block; padding: 5px 11px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+}
+.pill.pending  { background: rgba(255,204,0,.35); color: #6B5200; border: 1px solid rgba(255,204,0,.7); }
+.pill.approved { background: rgba(31,175,61,.18); color: var(--green-darker); border: 1px solid var(--green); }
+.pill.rejected { background: rgba(200,30,30,.15); color: #8A1F1F; border: 1px solid rgba(200,30,30,.5); }
+.pill.admin    { background: rgba(255,107,26,.20); color: var(--orange-dark); border: 1px solid var(--orange); }
+
+/* ============ Tables ============ */
+.table {
+  width: 100%; border-collapse: collapse; background: var(--white);
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+}
+.table th, .table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #f0e0c8; font-size: 14px; color: var(--text); }
+.table th {
+  background: var(--green); color: var(--white);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+}
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: var(--cream); }
+.actions { display: flex; gap: 8px; }
+
+/* ============ FAQ ============ */
+.faq-item {
+  background: var(--white); border-radius: var(--radius-sm);
+  padding: 22px 26px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
+  border-left: 5px solid var(--green);
+}
+.faq-item h4 {
+  font-size: 17px; color: var(--text); margin-bottom: 10px; font-weight: 700;
+  display: flex; align-items: center; gap: 12px;
+}
+.faq-item h4::before {
+  content: '?'; background: var(--green); color: var(--white);
+  width: 28px; height: 28px; border-radius: 50%; display: inline-flex;
+  align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0;
+}
+.faq-item p { color: var(--text-light); font-size: 15px; line-height: 1.6; margin-left: 40px; }
+
+/* ============ Member dashboard ============ */
+.dashboard-greeting {
+  background: var(--green); color: var(--white);
+  padding: 56px 36px 70px; text-align: center;
+}
+.dashboard-greeting h1 {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 64px);
+  letter-spacing: 2px; line-height: 1; margin-bottom: 12px;
+  text-shadow: 3px 3px 0 var(--green-darker);
+}
+.dashboard-greeting h1 .accent { color: var(--logo-yellow); }
+.dashboard-greeting p { color: rgba(255,255,255,.92); font-size: 17px; }
+.dashboard-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  max-width: 1200px; margin: -40px auto 0; padding: 0 36px;
+}
+@media (max-width: 800px) { .dashboard-cards { grid-template-columns: 1fr; } }
+.dashboard-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px; box-shadow: var(--shadow-lg);
+  border-top: 6px solid var(--orange);
+  cursor: pointer; transition: transform .15s ease;
+}
+.dashboard-card:hover { transform: translateY(-4px); }
+.dashboard-card.green-border { border-top-color: var(--green); }
+.dashboard-card h3 { font-family: var(--font-display); font-size: 26px; letter-spacing: 1.5px; margin-bottom: 8px; }
+.dashboard-card p { color: var(--text-light); margin-bottom: 18px; }
+
+/* ============ Footer ============ */
+.footer {
+  background: var(--green-darker);
+  color: rgba(255,255,255,.85);
+  padding: 60px 36px 30px;
+  margin-top: 0;
+}
+.footer-stripe {
+  height: 8px;
+  background: linear-gradient(90deg, var(--orange) 0%, var(--orange) 33%, var(--logo-yellow) 33%, var(--logo-yellow) 66%, var(--white) 66%, var(--white) 100%);
+  margin-bottom: 60px;
+  margin: -60px -36px 60px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px; max-width: 1200px; margin: 0 auto;
+}
+@media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 500px) { .footer-grid { grid-template-columns: 1fr; } }
+.footer-col h5 {
+  color: var(--white); font-size: 13px; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 16px; font-weight: 700;
+}
+.footer-col p, .footer-col a {
+  color: rgba(255,255,255,.75); font-size: 14px; line-height: 1.7;
+  text-decoration: none; display: block; cursor: pointer;
+}
+.footer-col a:hover { color: var(--logo-yellow); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.15);
+  margin-top: 50px; padding-top: 24px;
+  text-align: center; font-size: 13px; color: rgba(255,255,255,.6);
+  max-width: 1200px; margin-left: auto; margin-right: auto;
+}
+.footer .footer-brand-logo { width: 150px; max-width: 100%; margin-bottom: 14px; }
+.footer .footer-brand-logo svg { display: block; width: 100%; height: auto; }
+
+/* ============ Mini Auth Page ============ */
+.auth-wrap {
+  min-height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+}
+.auth-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 44px 38px; box-shadow: var(--shadow-lg);
+  border-top: 8px solid var(--green); max-width: 520px; width: 100%;
+}
+.auth-card h2 {
+  font-family: var(--font-display); font-size: 36px; letter-spacing: 2px;
+  margin-bottom: 24px; color: var(--text); text-align: center;
+}
+.auth-card .auth-sub {
+  text-align: center; color: var(--text-light); margin-bottom: 28px; font-size: 15px;
+}
+.auth-card .auth-foot {
+  text-align: center; margin-top: 22px; color: var(--text-light); font-size: 14px;
+}
+.auth-card .auth-foot a, .link {
+  color: var(--green-dark); font-weight: 700; cursor: pointer; text-decoration: none;
+}
+.auth-card .auth-foot a:hover, .link:hover { text-decoration: underline; }
+
+/* ============ Misc ============ */
+.text-center { text-align: center; }
+.mt-2 { margin-top: 16px; } .mt-4 { margin-top: 32px; }
+.mb-2 { margin-bottom: 16px; } .mb-4 { margin-bottom: 32px; }
+.flex-gap { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px;
+  justify-content: center;
+}
+.filter-bar button {
+  background: var(--white); color: var(--text); border: 2px solid var(--white);
+  padding: 9px 18px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit; transition: all .15s;
+  box-shadow: var(--shadow-sm); text-transform: uppercase; letter-spacing: 1px;
+}
+.filter-bar button:hover { color: var(--green-dark); }
+.filter-bar button.active { background: var(--green); color: var(--white); border-color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="brand" onclick="route('home')">
+    <div class="brand-logo">
+      <svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" font-family="Arial Black, Helvetica, sans-serif">
+        <g transform="skewX(-18) translate(28,0)">
+          <rect x="0"  y="14" width="10" height="52" fill="#E92020"/>
+          <rect x="14" y="14" width="10" height="52" fill="#F58220"/>
+          <rect x="28" y="14" width="10" height="52" fill="#FFCC00"/>
+        </g>
+        <text x="78" y="58" font-size="52" font-weight="900" font-style="italic" fill="#1F0E03" letter-spacing="-1">SMS</text>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <strong>FAN CLUB</strong>
+      <span>Spedition · Management · Service</span>
+    </div>
+  </div>
+  <nav class="topnav" id="topnav"></nav>
+</div>
+
+<main id="app"></main>
+
+<!-- Footer -->
+<div class="footer" id="footer-slot"></div>
+
+<!-- ============ JS ============ -->
+<script>
+
+const LOGO_SVG_LARGE = `<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" font-family="Arial Black, Helvetica, sans-serif">
+  <g transform="skewX(-18)">
+    <rect x="60"  y="40" width="34" height="120" fill="#E92020"/>
+    <rect x="100" y="40" width="34" height="120" fill="#F58220"/>
+    <rect x="140" y="40" width="34" height="120" fill="#FFCC00"/>
+  </g>
+  <text x="200" y="140" font-size="120" font-weight="900" font-style="italic" fill="#1F0E03" letter-spacing="-2">SMS</text>
+  <text x="200" y="180" font-size="20" font-weight="700" font-style="italic" fill="#1F0E03" letter-spacing="1">Spedition · Management · Service GmbH</text>
+  <rect x="200" y="190" width="380" height="6" fill="#E92020"/>
+</svg>`;
+
+const LOGO_SVG_SMALL = `<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" font-family="Arial Black, Helvetica, sans-serif">
+  <g transform="skewX(-18) translate(28,0)">
+    <rect x="0"  y="14" width="10" height="52" fill="#E92020"/>
+    <rect x="14" y="14" width="10" height="52" fill="#F58220"/>
+    <rect x="28" y="14" width="10" height="52" fill="#FFCC00"/>
+  </g>
+  <text x="78" y="58" font-size="52" font-weight="900" font-style="italic" fill="#FFFFFF" letter-spacing="-1">SMS</text>
+</svg>`;
+
+/* ----- Daten (localStorage als Speicher) ----- */
+const DB_KEY = 'sms_fanclub_db_v3';
+function loadDB() {
+  const raw = localStorage.getItem(DB_KEY);
+  if (raw) return JSON.parse(raw);
+  return seedDB();
+}
+function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+function seedDB() {
+  const db = {
+    members: [
+      { id: 1, firstName: 'SMS', lastName: 'Admin', email: 'admin@sms.local',
+        password: 'admin123', role: 'admin', status: 'approved',
+        company: '', street: '', zip: '', city: '', country: '', phone: '',
+        createdAt: new Date().toISOString() },
+      { id: 2, firstName: 'Max', lastName: 'Mustermann', email: 'kunde@sms.local',
+        password: 'kunde123', role: 'member', status: 'approved',
+        company: 'Mustermann Logistik GmbH',
+        street: 'Musterstraße 1', zip: '70173', city: 'Stuttgart',
+        country: 'Deutschland', phone: '+49 711 1234567',
+        createdAt: new Date().toISOString(),
+        approvedAt: new Date().toISOString() }
+    ],
+    nextMemberId: 3,
+    orders: [],
+    nextOrderId: 1,
+    merch: [
+      { id: 1,  name: 'Trucker Cap',         desc: 'Klassische Cap mit gesticktem SMS-Logo', price: 24.90, emoji: '🧢', stock: 50,  category: 'Kleidung' },
+      { id: 2,  name: 'Hoodie "On the Road"', desc: 'Schwerer Hoodie für lange Touren',       price: 59.90, emoji: '👕', stock: 30,  category: 'Kleidung' },
+      { id: 3,  name: 'Coffee Mug',          desc: 'Tasse für die Pause an der Raststätte',  price: 12.90, emoji: '☕', stock: 80,  category: 'Zubehör' },
+      { id: 4,  name: 'T-Shirt Classic',     desc: 'Premium-Baumwolle, schwarz mit Logo',     price: 29.90, emoji: '👔', stock: 100, category: 'Kleidung' },
+      { id: 5,  name: 'Trucker-Jacke',       desc: 'Wetterfeste Jacke mit Reflektorstreifen', price: 89.90, emoji: '🧥', stock: 20,  category: 'Kleidung' },
+      { id: 6,  name: 'Schlüsselanhänger',   desc: 'Robuster Metall-Anhänger mit Logo',       price: 7.90,  emoji: '🔑', stock: 200, category: 'Zubehör' },
+      { id: 7,  name: 'Edelstahl-Flasche',   desc: '750ml doppelwandig, hält kalt & warm',     price: 19.90, emoji: '🍶', stock: 60,  category: 'Zubehör' },
+      { id: 8,  name: 'Aufkleber-Set',       desc: '5er-Set Vinyl-Aufkleber für Truck & Co.',  price: 4.90,  emoji: '🏷️', stock: 500, category: 'Zubehör' },
+      { id: 9,  name: 'Powerbank 10.000mAh', desc: 'Im SMS-Design, mit USB-C und Lightning',  price: 34.90, emoji: '🔋', stock: 40,  category: 'Tech' },
+      { id: 10, name: 'Kapuzen-Pullover',    desc: 'Sweatshirt mit großem SMS-Logo auf der Brust', price: 49.90, emoji: '🧥', stock: 40, category: 'Kleidung' },
+      { id: 11, name: 'Notizbuch A5',        desc: 'Hardcover-Notizbuch mit Lesezeichen',     price: 14.90, emoji: '📓', stock: 120, category: 'Zubehör' },
+      { id: 12, name: 'Reise-Mug',           desc: 'Thermobecher für unterwegs, 400ml',       price: 17.90, emoji: '🥤', stock: 70,  category: 'Zubehör' }
+    ],
+    codes: [
+      { id: 1,  partner: 'Truck-Tankstelle 24',  url: 'https://example.com', code: 'SMS-FUEL10', discount: '10% auf Diesel',         desc: 'Rabatt an allen Partner-Tankstellen in DE und AT',  category: 'Tankstellen' },
+      { id: 2,  partner: 'AutohofPlus',          url: 'https://example.com', code: 'SMSCLUB15',  discount: '15% auf Verpflegung',    desc: 'Gilt im Restaurant und im Shop',                    category: 'Gastro' },
+      { id: 3,  partner: 'LKW-Reifen Direkt',    url: 'https://example.com', code: 'SMSWHEELS',  discount: '8% Werkstattrabatt',     desc: 'Auf alle LKW-Reifen und die Montage',               category: 'Werkstatt' },
+      { id: 4,  partner: 'Spedition-Tools',      url: 'https://example.com', code: 'SMSPRO20',   discount: '20% auf Software',       desc: 'Disposition und Routenplanung im Browser',           category: 'Software' },
+      { id: 5,  partner: 'TruckWash Premium',    url: 'https://example.com', code: 'SMS-SHINE',  discount: '5€ Rabatt pro Wäsche',   desc: 'Bei jeder LKW-Wäsche an unseren Stationen',         category: 'Werkstatt' },
+      { id: 6,  partner: 'Raststätten-Hotels',   url: 'https://example.com', code: 'SMSNIGHT',   discount: '12% auf Übernachtung',    desc: 'In allen Partner-Hotels entlang der A-Strecken',    category: 'Hotel' },
+      { id: 7,  partner: 'Cargo-Versicherung',   url: 'https://example.com', code: 'SMSSAFE',    discount: '10% auf Jahrespolice',   desc: 'Transport- und Ladungsversicherung',                 category: 'Versicherung' },
+      { id: 8,  partner: 'Mautmaster',           url: 'https://example.com', code: 'SMSMAUT5',   discount: '5% Mautgebühren',         desc: 'Abrechnung über die SMS-Schnittstelle',             category: 'Software' },
+      { id: 9,  partner: 'Trucker-Outfit24',     url: 'https://example.com', code: 'SMSWEAR',    discount: '15% auf Berufskleidung', desc: 'Sicherheits- und Berufskleidung für Fahrer',         category: 'Kleidung' },
+      { id: 10, partner: 'NavSat Pro',           url: 'https://example.com', code: 'SMSNAV',     discount: '25% auf Jahreslizenz',   desc: 'Navi-Software speziell für 40-Tonner',               category: 'Software' }
+    ]
+  };
+  saveDB(db);
+  return db;
+}
+
+/* ----- Session ----- */
+const SESSION_KEY = 'sms_fanclub_session';
+function getMe() {
+  const id = localStorage.getItem(SESSION_KEY);
+  if (!id) return null;
+  return loadDB().members.find(m => m.id === parseInt(id));
+}
+function setSession(id) { localStorage.setItem(SESSION_KEY, String(id)); }
+function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+/* ----- Routing ----- */
+function route(page) {
+  window.scrollTo(0, 0);
+  const me = getMe();
+  const memberOnly = ['members', 'shop', 'codes'];
+  const adminOnly = ['admin'];
+  if (memberOnly.includes(page) && (!me || (me.status !== 'approved' && me.role !== 'admin'))) {
+    page = me ? 'pending' : 'login';
+  }
+  if (adminOnly.includes(page) && (!me || me.role !== 'admin')) page = 'login';
+
+  renderTopbar(page);
+  renderFooter();
+  const views = {
+    home: viewHome, login: viewLogin, register: viewRegister, pending: viewPending,
+    members: viewMembers, shop: viewShop, codes: viewCodes, admin: viewAdmin,
+    impressum: viewImpressum, datenschutz: viewDatenschutz, faq: viewFaq
+  };
+  document.getElementById('app').innerHTML = (views[page] || viewHome)();
+}
+
+function renderTopbar(active) {
+  const me = getMe();
+  let items = [];
+  if (!me) {
+    items = [
+      { key: 'home',     label: 'Start' },
+      { key: 'faq',      label: 'FAQ' },
+      { key: 'login',    label: 'Login' },
+      { key: 'register', label: 'Mitglied werden', cta: true }
+    ];
+  } else if (me.status !== 'approved' && me.role !== 'admin') {
+    items = [
+      { key: 'pending', label: 'Status' },
+      { key: 'logout',  label: 'Logout' }
+    ];
+  } else {
+    items = [
+      { key: 'members', label: 'Clubhaus' },
+      { key: 'shop',    label: 'Shop' },
+      { key: 'codes',   label: 'Rabatt-Codes' }
+    ];
+    if (me.role === 'admin') items.push({ key: 'admin', label: 'Admin' });
+    items.push({ key: 'logout', label: 'Logout' });
+  }
+  document.getElementById('topnav').innerHTML = items.map(i => {
+    const cls = [active === i.key ? 'active' : '', i.cta ? 'cta' : ''].filter(Boolean).join(' ');
+    if (i.key === 'logout') return `<button class="${cls}" onclick="clearSession();route('home')">${i.label}</button>`;
+    return `<button class="${cls}" onclick="route('${i.key}')">${i.label}</button>`;
+  }).join('');
+}
+
+function renderFooter() {
+  document.getElementById('footer-slot').innerHTML = `
+    <div class="footer-stripe"></div>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand-logo">${LOGO_SVG_SMALL}</div>
+        <p>Der offizielle Fan Club der SMS Spedition Management Service GmbH. Exklusive Vorteile für unsere treuen Kunden, Fahrer und Partner.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Fan Club</h5>
+        <a onclick="route('home')">Start</a>
+        <a onclick="route('register')">Mitglied werden</a>
+        <a onclick="route('login')">Login</a>
+        <a onclick="route('faq')">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h5>Vorteile</h5>
+        <a onclick="route('login')">Merch-Shop</a>
+        <a onclick="route('login')">Rabatt-Codes</a>
+        <a onclick="route('login')">Mitgliederbereich</a>
+      </div>
+      <div class="footer-col">
+        <h5>Rechtliches</h5>
+        <a onclick="route('impressum')">Impressum</a>
+        <a onclick="route('datenschutz')">Datenschutz</a>
+        <a onclick="route('impressum')">AGB</a>
+        <a onclick="route('impressum')">Kontakt</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © ${new Date().getFullYear()} SMS Spedition Management Service GmbH · Alle Rechte vorbehalten
+    </div>
+  `;
+}
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+
+function viewHome() {
+  return `
+  <section class="hero">
+    <div class="brand-logo-large">${LOGO_SVG_LARGE}</div>
+    <h1>WILLKOMMEN<br>IM <span class="green">FAN CLUB</span></h1>
+    <p class="lead">
+      Der exklusive Mitgliederbereich für alle, die mit SMS unterwegs sind.
+      Original-Merch, Rabatte bei Partnern entlang der Strecke und mehr.
+    </p>
+    <div class="hero-buttons">
+      <button class="btn btn-white" onclick="route('register')">🔑 Jetzt Mitglied werden</button>
+      <button class="btn btn-outline" onclick="route('login')">Login</button>
+    </div>
+
+    <div class="usp-row">
+      <div class="usp"><div class="num">12+</div><div class="label">Original<br>Merch-Artikel</div></div>
+      <div class="usp"><div class="num">10+</div><div class="label">Rabatt-Codes<br>bei Partnern</div></div>
+      <div class="usp"><div class="num">100%</div><div class="label">Kostenlos für<br>SMS-Mitglieder</div></div>
+    </div>
+  </section>
+
+  <section class="section-green">
+    <h2>Deine Vorteile als Mitglied</h2>
+    <p class="section-sub">Alles was du als SMS-Fan, Kunde oder Fahrer brauchst – an einem Ort.</p>
+    <div style="max-width:1100px;margin:0 auto;" class="grid-3">
+      <div class="card card-green">
+        <span class="card-icon">👕</span>
+        <h3>SMS-Merch</h3>
+        <p>Original Hoodies, Caps, Tassen, Aufkleber und mehr. Hochwertig produziert,
+        nur für Mitglieder verfügbar – kein Wiederverkauf, keine Fakes.</p>
+      </div>
+      <div class="card card-green">
+        <span class="card-icon">🎟️</span>
+        <h3>Partner-Rabatte</h3>
+        <p>Sparen bei Tankstellen, Werkstätten, Hotels und Software-Anbietern.
+        Über zehn Partner mit dauerhaften Rabattcodes nur für SMS-Mitglieder.</p>
+      </div>
+      <div class="card card-green">
+        <span class="card-icon">🚛</span>
+        <h3>SMS-Familie</h3>
+        <p>Sei Teil einer Community aus Fahrern, Disponenten und Fans, die zusammen
+        die Straßen Europas befahren – jeden Tag, bei jedem Wetter.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <h2 class="section-title">So funktioniert's</h2>
+    <p class="section-sub">In wenigen Schritten zum Mitglied im SMS Fan Club.</p>
+    <div class="grid-3">
+      <div class="card">
+        <div style="background:var(--green);color:var(--white);width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:24px;margin-bottom:16px;">1</div>
+        <h3>Anmelden</h3>
+        <p>Trag deine Daten ein – Name, Firma, Anschrift, E-Mail. Dauert keine zwei Minuten.</p>
+      </div>
+      <div class="card">
+        <div style="background:var(--green);color:var(--white);width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:24px;margin-bottom:16px;">2</div>
+        <h3>Freischaltung</h3>
+        <p>Wir prüfen deinen Antrag und schalten dich frei. Du bekommst eine Mail, sobald es soweit ist.</p>
+      </div>
+      <div class="card">
+        <div style="background:var(--green);color:var(--white);width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:24px;margin-bottom:16px;">3</div>
+        <h3>Loslegen</h3>
+        <p>Shop nutzen, Rabatte einlösen, im Clubhaus stöbern. Volle Vorteile, dauerhaft.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-green" style="padding: 70px 36px;">
+    <h2>Bereit für den Fan Club?</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.92);">Werde Teil der SMS-Familie und sichere dir die Vorteile.</p>
+    <div class="flex-gap">
+      <button class="btn btn-white" onclick="route('register')">🚛 Mitglied werden</button>
+      <button class="btn btn-outline" onclick="route('faq')">Erst informieren</button>
+    </div>
+  </section>`;
+}
+
+function viewLogin() {
+  setTimeout(() => {
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const m = loadDB().members.find(x => x.email.toLowerCase() === email);
+      const a = document.getElementById('alert');
+      if (!m || m.password !== password) { a.className = 'alert error show'; a.textContent = 'E-Mail oder Passwort falsch.'; return; }
+      if (m.status !== 'approved' && m.role !== 'admin') {
+        a.className = 'alert error show'; a.textContent = 'Dein Antrag wurde noch nicht freigeschaltet.'; return;
+      }
+      setSession(m.id);
+      a.className = 'alert success show'; a.textContent = 'Login erfolgreich!';
+      setTimeout(() => route(m.role === 'admin' ? 'admin' : 'members'), 500);
+    });
+  }, 0);
+  return `
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>🔑 Login</h2>
+      <p class="auth-sub">Willkommen zurück im SMS Fan Club.</p>
+      <div id="alert" class="alert"></div>
+      <form id="loginForm">
+        <div class="form-row"><label>E-Mail</label><input type="email" id="email" required autocomplete="email"></div>
+        <div class="form-row"><label>Passwort</label><input type="password" id="password" required autocomplete="current-password"></div>
+        <button type="submit" class="btn btn-block">Einloggen</button>
+      </form>
+      <p class="auth-foot">
+        Noch kein Mitglied? <a onclick="route('register')">Hier anmelden →</a>
+      </p>
+    </div>
+  </div>`;
+}
+
+function viewRegister() {
+  setTimeout(() => {
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const a = document.getElementById('alert');
+      const fields = ['firstName','lastName','company','street','zip','city','country','email','phone','password','password2'];
+      const v = {}; fields.forEach(f => v[f] = document.getElementById(f).value.trim());
+      if (v.password !== v.password2) { a.className = 'alert error show'; a.textContent = 'Die Passwörter stimmen nicht überein.'; return; }
+      if (v.password.length < 6)      { a.className = 'alert error show'; a.textContent = 'Passwort min. 6 Zeichen.'; return; }
+      const db = loadDB();
+      if (db.members.find(m => m.email.toLowerCase() === v.email.toLowerCase())) {
+        a.className = 'alert error show'; a.textContent = 'Diese E-Mail ist bereits registriert.'; return;
+      }
+      const newM = {
+        id: db.nextMemberId++, firstName: v.firstName, lastName: v.lastName,
+        company: v.company, street: v.street, zip: v.zip, city: v.city,
+        country: v.country || 'Deutschland', email: v.email.toLowerCase(),
+        phone: v.phone, password: v.password, role: 'member', status: 'pending',
+        createdAt: new Date().toISOString()
+      };
+      db.members.push(newM); saveDB(db);
+      a.className = 'alert success show';
+      a.textContent = '✅ Antrag eingegangen! Wir prüfen deine Daten und schalten dich anschließend frei.';
+      document.getElementById('registerForm').reset();
+      setTimeout(() => route('login'), 2500);
+    });
+  }, 0);
+  return `
+  <div class="container" style="max-width:760px;">
+    <div class="card" style="padding:48px 40px;">
+      <h2 style="text-align:center;font-family:var(--font-display);font-size:42px;letter-spacing:2px;color:var(--text);margin-bottom:8px;">🚛 Mitglied werden</h2>
+      <p style="text-align:center;color:var(--text-light);margin-bottom:32px;">
+        Trag deine Daten ein. Nach kurzer Prüfung wirst du freigeschaltet und bekommst Zugang zu Shop &amp; Rabatten.
+      </p>
+      <div id="alert" class="alert"></div>
+      <form id="registerForm">
+        <div class="form-grid">
+          <div class="form-row"><label>Vorname *</label><input type="text" id="firstName" required></div>
+          <div class="form-row"><label>Nachname *</label><input type="text" id="lastName" required></div>
+        </div>
+        <div class="form-row"><label>Firma (optional)</label><input type="text" id="company" placeholder="z.B. Mustermann Logistik GmbH"></div>
+        <div class="form-row"><label>Straße &amp; Hausnummer</label><input type="text" id="street"></div>
+        <div class="form-grid">
+          <div class="form-row"><label>PLZ</label><input type="text" id="zip"></div>
+          <div class="form-row"><label>Ort</label><input type="text" id="city"></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row"><label>Land</label><input type="text" id="country" value="Deutschland"></div>
+          <div class="form-row"><label>Telefon (optional)</label><input type="tel" id="phone"></div>
+        </div>
+        <div class="form-row"><label>E-Mail *</label><input type="email" id="email" required></div>
+        <div class="form-grid">
+          <div class="form-row"><label>Passwort * (min. 6)</label><input type="password" id="password" required minlength="6"></div>
+          <div class="form-row"><label>Wiederholen *</label><input type="password" id="password2" required minlength="6"></div>
+        </div>
+        <p style="font-size:13px;color:var(--text-light);margin:18px 0;">
+          Mit dem Absenden bestätigst du, dass du unsere
+          <a class="link" onclick="route('datenschutz')">Datenschutzerklärung</a> gelesen hast.
+        </p>
+        <button type="submit" class="btn btn-block">Antrag absenden</button>
+        <p class="auth-foot">Schon Mitglied? <a class="link" onclick="route('login')">Einloggen →</a></p>
+      </form>
+    </div>
+  </div>`;
+}
+
+function viewPending() {
+  return `
+  <div class="auth-wrap">
+    <div class="auth-card text-center">
+      <div style="font-size:72px;margin-bottom:18px;">⏳</div>
+      <h2>Antrag in Prüfung</h2>
+      <p class="auth-sub">
+        Dein Antrag liegt uns vor. Sobald wir dich freigeschaltet haben, bekommst du eine
+        E-Mail und kannst dich einloggen.
+      </p>
+      <button class="btn btn-block" onclick="clearSession();route('home')">Logout</button>
+    </div>
+  </div>`;
+}
+
+function viewMembers() {
+  const me = getMe();
+  const db = loadDB();
+  const myOrders = db.orders.filter(o => o.memberId === me.id).sort((a,b) => b.id - a.id);
+  return `
+  <section class="dashboard-greeting">
+    <h1>SERVUS<span style="color:var(--logo-yellow)">,</span> <span class="accent">${me.firstName.toUpperCase()}</span></h1>
+    <p>Willkommen im SMS-Clubhaus.</p>
+  </section>
+
+  <div class="dashboard-cards">
+    <div class="dashboard-card" onclick="route('shop')">
+      <span style="font-size:48px;display:block;margin-bottom:10px;">🛒</span>
+      <h3>Merch-Shop</h3>
+      <p>Original-Caps, Hoodies, Tassen & mehr im SMS-Look.</p>
+      <button class="btn btn-orange">Zum Shop →</button>
+    </div>
+    <div class="dashboard-card green-border" onclick="route('codes')">
+      <span style="font-size:48px;display:block;margin-bottom:10px;">🎟️</span>
+      <h3>Rabatt-Codes</h3>
+      <p>Tank-, Werkstatt-, Hotel- und Software-Rabatte.</p>
+      <button class="btn">Codes ansehen →</button>
+    </div>
+    <div class="dashboard-card">
+      <span style="font-size:48px;display:block;margin-bottom:10px;">📦</span>
+      <h3>Meine Bestellungen</h3>
+      ${myOrders.length === 0
+        ? '<p style="font-size:14px">Du hast noch keine Bestellungen.</p>'
+        : '<div style="max-height:200px;overflow:auto;font-size:14px">' + myOrders.map(o => `
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0e0c8;">
+              <span>${o.emoji} ${o.quantity}× ${o.name}</span>
+              <span style="color:var(--green-dark);font-weight:700">${o.total.toFixed(2)} €</span>
+            </div>`).join('') + '</div>'
+      }
+    </div>
+  </div>
+
+  <section class="section-green" style="margin-top:80px;">
+    <h2>Brauchst du Hilfe?</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.92);">
+      Fragen zu Mitgliedschaft, Bestellungen oder Rabatten? Wir helfen dir gerne weiter.
+    </p>
+    <div style="text-align:center;">
+      <button class="btn btn-white" onclick="route('faq')">FAQ anschauen</button>
+    </div>
+  </section>`;
+}
+
+function viewShop() {
+  setTimeout(() => {
+    document.querySelectorAll('.filter-bar button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.filter-bar button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const cat = b.dataset.cat;
+        document.querySelectorAll('.merch-card').forEach(card => {
+          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+    document.getElementById('merchGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-id]');
+      if (!btn) return;
+      const id = parseInt(btn.dataset.id);
+      const db = loadDB();
+      const item = db.merch.find(m => m.id === id);
+      if (!item || item.stock <= 0) return;
+      item.stock -= 1;
+      const me = getMe();
+      db.orders.push({
+        id: db.nextOrderId++, memberId: me.id, name: item.name, emoji: item.emoji,
+        quantity: 1, total: item.price, createdAt: new Date().toISOString()
+      });
+      saveDB(db);
+      const a = document.getElementById('alert');
+      a.className = 'alert success show';
+      a.textContent = `✅ "${item.name}" für ${item.price.toFixed(2)} € erfolgreich bestellt!`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => route('shop'), 1200);
+    });
+  }, 0);
+  const items = loadDB().merch;
+  const cats = ['all', ...new Set(items.map(i => i.category))];
+  return `
+  <section class="hero" style="padding: 60px 36px 30px;">
+    <h1 style="font-size:clamp(48px,7vw,80px)">SMS <span class="green">MERCH</span></h1>
+    <p class="lead">Original-Artikel im SMS-Design. Exklusiv für Mitglieder.</p>
+  </section>
+  <div class="container" style="padding-top:24px;">
+    <div id="alert" class="alert"></div>
+    <div class="filter-bar">
+      ${cats.map((c,i) => `<button class="${i===0?'active':''}" data-cat="${c}">${c === 'all' ? 'Alle' : c}</button>`).join('')}
+    </div>
+    <div id="merchGrid" class="grid">
+      ${items.map(i => `
+        <div class="merch-card" data-cat="${i.category}">
+          <span class="category-tag">${i.category}</span>
+          <div class="merch-emoji">${i.emoji}</div>
+          <h3>${i.name}</h3>
+          <p class="desc">${i.desc}</p>
+          <div class="price-row">
+            <span class="price">${i.price.toFixed(2)} €</span>
+            <span class="stock">${i.stock} auf Lager</span>
+          </div>
+          <button class="btn btn-block" data-id="${i.id}" ${i.stock <= 0 ? 'disabled style="opacity:.5;cursor:not-allowed"' : ''}>
+            ${i.stock <= 0 ? 'Ausverkauft' : 'In den Warenkorb'}
+          </button>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function viewCodes() {
+  setTimeout(() => {
+    document.querySelectorAll('.filter-bar button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.filter-bar button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const cat = b.dataset.cat;
+        document.querySelectorAll('.code-card').forEach(card => {
+          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+    document.getElementById('codesGrid').addEventListener('click', async (e) => {
+      const box = e.target.closest('.code-box');
+      if (!box) return;
+      try {
+        await navigator.clipboard.writeText(box.dataset.code);
+        const orig = box.textContent;
+        box.textContent = '✓ Kopiert!';
+        setTimeout(() => box.textContent = orig, 1200);
+      } catch { alert('Code: ' + box.dataset.code); }
+    });
+  }, 0);
+  const codes = loadDB().codes;
+  const cats = ['all', ...new Set(codes.map(c => c.category))];
+  return `
+  <section class="hero" style="padding: 60px 36px 30px;">
+    <h1 style="font-size:clamp(48px,7vw,80px)">RABATT <span class="green">CODES</span></h1>
+    <p class="lead">Exklusive Vergünstigungen bei unseren Partnern. Klick auf einen Code zum Kopieren.</p>
+  </section>
+  <div class="container" style="padding-top:24px;">
+    <div class="filter-bar">
+      ${cats.map((c,i) => `<button class="${i===0?'active':''}" data-cat="${c}">${c === 'all' ? 'Alle' : c}</button>`).join('')}
+    </div>
+    <div id="codesGrid" class="grid">
+      ${codes.map(c => `
+        <div class="code-card" data-cat="${c.category}">
+          <span class="code-tag">${c.category}</span>
+          <h3>${c.partner}</h3>
+          <div class="partner-discount">${c.discount}</div>
+          <p class="desc">${c.desc}</p>
+          <div class="code-box" data-code="${c.code}" title="Klick zum Kopieren">${c.code}</div>
+          ${c.url ? `<a href="${c.url}" target="_blank" rel="noopener" class="partner-link">→ Zur Partner-Seite</a>` : ''}
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function viewAdmin() {
+  setTimeout(() => {
+    document.getElementById('membersBody').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const id = parseInt(btn.dataset.id);
+      const action = btn.dataset.action;
+      const db = loadDB();
+      const m = db.members.find(x => x.id === id);
+      if (!m) return;
+      m.status = action === 'approve' ? 'approved' : 'rejected';
+      if (action === 'approve') m.approvedAt = new Date().toISOString();
+      saveDB(db);
+      const a = document.getElementById('alert');
+      a.className = 'alert success show';
+      a.textContent = action === 'approve' ? '✅ Mitglied freigeschaltet' : '⛔ Mitglied abgelehnt';
+      setTimeout(() => route('admin'), 600);
+    });
+  }, 0);
+  const fmt = s => s ? new Date(s).toLocaleString('de-DE') : '–';
+  const db = loadDB();
+  const members = [...db.members].sort((a,b) => b.id - a.id);
+  const orders = [...db.orders].sort((a,b) => b.id - a.id).slice(0, 50);
+  const pending = members.filter(m => m.status === 'pending').length;
+  return `
+  <section class="dashboard-greeting">
+    <h1>ADMIN <span class="accent">PANEL</span></h1>
+    <p>Mitglieder verwalten, Bestellungen einsehen.</p>
+  </section>
+  <div class="container">
+    <div id="alert" class="alert"></div>
+
+    <div class="grid-3 mb-4">
+      <div class="card text-center"><div style="font-family:var(--font-display);font-size:48px;color:var(--green-dark)">${members.length}</div><div style="text-transform:uppercase;font-weight:700;letter-spacing:1px;color:var(--text-light);font-size:13px">Mitglieder gesamt</div></div>
+      <div class="card text-center"><div style="font-family:var(--font-display);font-size:48px;color:var(--orange)">${pending}</div><div style="text-transform:uppercase;font-weight:700;letter-spacing:1px;color:var(--text-light);font-size:13px">Offene Anträge</div></div>
+      <div class="card text-center"><div style="font-family:var(--font-display);font-size:48px;color:var(--green-dark)">${db.orders.length}</div><div style="text-transform:uppercase;font-weight:700;letter-spacing:1px;color:var(--text-light);font-size:13px">Bestellungen</div></div>
+    </div>
+
+    <div class="card mb-4">
+      <h2>👥 Mitglieder</h2>
+      <div style="overflow-x:auto;">
+        <table class="table">
+          <thead><tr><th>Name</th><th>E-Mail</th><th>Firma</th><th>Antrag</th><th>Status</th><th>Aktionen</th></tr></thead>
+          <tbody id="membersBody">
+            ${members.map(m => `
+              <tr>
+                <td><strong>${m.firstName} ${m.lastName}</strong></td>
+                <td>${m.email}</td>
+                <td>${m.company || '–'}</td>
+                <td>${fmt(m.createdAt)}</td>
+                <td>${m.role === 'admin' ? '<span class="pill admin">Admin</span>' : `<span class="pill ${m.status}">${m.status}</span>`}</td>
+                <td class="actions">
+                  ${m.role === 'admin' ? '–' : `
+                    ${m.status !== 'approved' ? `<button class="btn btn-sm" data-action="approve" data-id="${m.id}">Freischalten</button>` : ''}
+                    ${m.status !== 'rejected' ? `<button class="btn btn-sm btn-danger" data-action="reject" data-id="${m.id}">Ablehnen</button>` : ''}
+                  `}
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🛒 Letzte Bestellungen</h2>
+      <div style="overflow-x:auto;">
+        <table class="table">
+          <thead><tr><th>Datum</th><th>Mitglied</th><th>Artikel</th><th>Anzahl</th><th>Summe</th></tr></thead>
+          <tbody>
+            ${orders.length === 0
+              ? '<tr><td colspan="5" class="text-center" style="color:var(--text-light)">Noch keine Bestellungen</td></tr>'
+              : orders.map(o => {
+                  const u = db.members.find(m => m.id === o.memberId) || { firstName: '?', lastName: '?', email: '?' };
+                  return `<tr>
+                    <td>${fmt(o.createdAt)}</td>
+                    <td>${u.firstName} ${u.lastName}<br><span style="font-size:12px;color:var(--text-light)">${u.email}</span></td>
+                    <td>${o.emoji} ${o.name}</td>
+                    <td>${o.quantity}</td>
+                    <td><strong style="color:var(--green-dark)">${o.total.toFixed(2)} €</strong></td>
+                  </tr>`;
+                }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewFaq() {
+  return `
+  <section class="hero" style="padding: 60px 36px 30px;">
+    <h1 style="font-size:clamp(48px,7vw,80px)">HÄUFIGE <span class="green">FRAGEN</span></h1>
+    <p class="lead">Alles, was du zum SMS Fan Club wissen musst.</p>
+  </section>
+  <div class="container" style="max-width:820px;padding-top:24px;">
+    <div class="faq-item">
+      <h4>Was ist der SMS Fan Club?</h4>
+      <p>Der offizielle Mitgliederbereich der SMS Spedition Management Service GmbH. Mitglieder erhalten Zugang zu exklusivem Merch, dauerhaften Rabattcodes bei Partnern und sind Teil unserer Community.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Wer kann Mitglied werden?</h4>
+      <p>Grundsätzlich jeder, der mit SMS verbunden ist – ob Kunde, Fahrer, Mitarbeiter oder Geschäftspartner. Die Mitgliedschaft ist kostenfrei und nach Freischaltung dauerhaft gültig.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Wie schnell werde ich freigeschaltet?</h4>
+      <p>In der Regel innerhalb von 1–2 Werktagen. Du bekommst eine E-Mail-Bestätigung, sobald dein Antrag geprüft wurde.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Was kostet die Mitgliedschaft?</h4>
+      <p>Nichts. Der Fan Club ist und bleibt kostenfrei. Es gibt keine Mindestlaufzeiten und keine versteckten Gebühren.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Wie funktioniert der Merch-Shop?</h4>
+      <p>Im Shop findest du Original-Produkte im SMS-Design. Die Bestellung läuft direkt über die Mitgliederseite. Versand erfolgt deutschlandweit, EU-weit auf Anfrage.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Wie nutze ich die Rabatt-Codes?</h4>
+      <p>Im Bereich "Rabatt-Codes" findest du alle aktiven Aktionen. Code kopieren, beim Partner einlösen, fertig. Die Codes sind dauerhaft für Mitglieder gültig.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Wie kann ich mich abmelden?</h4>
+      <p>Eine formlose E-Mail an info@sms-spedition.de mit dem Betreff "Mitgliedschaft kündigen" reicht. Deine Daten werden dann gemäß DSGVO gelöscht.</p>
+    </div>
+  </div>
+
+  <section class="section-green">
+    <h2>Noch Fragen?</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.92)">Schreib uns einfach eine E-Mail – wir helfen dir gerne weiter.</p>
+    <div style="text-align:center;">
+      <a href="mailto:info@sms-spedition.de" class="btn btn-white">📧 E-Mail schreiben</a>
+    </div>
+  </section>`;
+}
+
+function viewImpressum() {
+  return `
+  <section class="hero" style="padding: 60px 36px 30px;">
+    <h1 style="font-size:clamp(40px,5vw,64px)">IMPRESSUM</h1>
+  </section>
+  <div class="container" style="max-width:820px;padding-top:24px;">
+    <div class="card">
+      <h2>Angaben gemäß § 5 TMG</h2>
+      <p style="margin-top:16px;color:var(--text);line-height:1.7;">
+        <strong>SMS Spedition Management Service GmbH</strong><br>
+        [Straße &amp; Hausnummer]<br>
+        [PLZ Ort]<br>
+        Deutschland
+      </p>
+      <h2 style="margin-top:32px;">Kontakt</h2>
+      <p style="color:var(--text);line-height:1.7;">
+        Telefon: [+49 …]<br>
+        E-Mail: info@sms-spedition.de
+      </p>
+      <h2 style="margin-top:32px;">Vertreten durch</h2>
+      <p style="color:var(--text);line-height:1.7;">
+        Geschäftsführer: [Name Geschäftsführer]
+      </p>
+      <h2 style="margin-top:32px;">Registereintrag</h2>
+      <p style="color:var(--text);line-height:1.7;">
+        Eintragung im Handelsregister.<br>
+        Registergericht: [Amtsgericht]<br>
+        Registernummer: HRB [Nummer]
+      </p>
+      <h2 style="margin-top:32px;">Umsatzsteuer-ID</h2>
+      <p style="color:var(--text);line-height:1.7;">
+        Umsatzsteuer-Identifikationsnummer gemäß § 27 a UStG:<br>
+        DE [Nummer]
+      </p>
+      <h2 style="margin-top:32px;">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+      <p style="color:var(--text);line-height:1.7;">
+        [Name], [Anschrift]
+      </p>
+      <p style="margin-top:32px;padding:16px;background:var(--cream);border-radius:8px;color:var(--text-light);font-size:13px;">
+        ℹ️ Hinweis: Diese Platzhalter bitte vor Veröffentlichung mit den echten Firmen-Daten ersetzen.
+      </p>
+    </div>
+  </div>`;
+}
+
+function viewDatenschutz() {
+  return `
+  <section class="hero" style="padding: 60px 36px 30px;">
+    <h1 style="font-size:clamp(40px,5vw,64px)">DATEN<span class="green">SCHUTZ</span></h1>
+  </section>
+  <div class="container" style="max-width:820px;padding-top:24px;">
+    <div class="card">
+      <h2>1. Datenschutz auf einen Blick</h2>
+      <p style="margin-top:12px;line-height:1.7;color:var(--text-light);">
+        Die folgenden Hinweise geben einen Überblick darüber, was mit deinen personenbezogenen Daten passiert,
+        wenn du diese Website besuchst oder dich als Mitglied im SMS Fan Club registrierst.
+      </p>
+
+      <h2 style="margin-top:32px;">2. Verantwortliche Stelle</h2>
+      <p style="margin-top:12px;line-height:1.7;color:var(--text-light);">
+        Verantwortlich für die Datenverarbeitung auf dieser Website ist die SMS Spedition Management Service GmbH.
+        Die Kontaktdaten findest du im <a class="link" onclick="route('impressum')">Impressum</a>.
+      </p>
+
+      <h2 style="margin-top:32px;">3. Welche Daten werden erfasst?</h2>
+      <p style="margin-top:12px;line-height:1.7;color:var(--text-light);">
+        Bei der Registrierung im Fan Club speichern wir:
+      </p>
+      <ul style="margin-left:24px;margin-top:8px;line-height:1.8;color:var(--text-light);">
+        <li>Name (Vor- und Nachname)</li>
+        <li>Firma (optional)</li>
+        <li>Anschrift</li>
+        <li>E-Mail-Adresse und Telefon (optional)</li>
+        <li>Verschlüsseltes Passwort</li>
+      </ul>
+
+      <h2 style="margin-top:32px;">4. Zweck der Verarbeitung</h2>
+      <p style="margin-top:12px;line-height:1.7;color:var(--text-light);">
+        Die Daten werden ausschließlich zur Verwaltung der Mitgliedschaft, Abwicklung von Merch-Bestellungen
+        und zur gelegentlichen Information über neue Vorteile verwendet.
+      </p>
+
+      <h2 style="margin-top:32px;">5. Deine Rechte</h2>
+      <p style="margin-top:12px;line-height:1.7;color:var(--text-light);">
+        Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung
+        deiner Daten. Schreib uns einfach eine E-Mail an info@sms-spedition.de.
+      </p>
+
+      <h2 style="margin-top:32px;">6. Cookies</h2>
+      <p style="margin-top:12px;line-height:1.7;color:var(--text-light);">
+        Wir verwenden nur technisch notwendige Cookies / Local-Storage, um deinen Login-Status zu speichern.
+        Es werden keine Tracking- oder Werbe-Cookies gesetzt.
+      </p>
+
+      <p style="margin-top:32px;padding:16px;background:var(--cream);border-radius:8px;color:var(--text-light);font-size:13px;">
+        ℹ️ Hinweis: Diese Datenschutzerklärung ist ein Grundgerüst. Für die endgültige Veröffentlichung sollte ein
+        Anwalt oder ein Generator wie e-recht24.de für die vollständige Fassung herangezogen werden.
+      </p>
+    </div>
+  </div>`;
+}
+
+/* ----- Init ----- */
+loadDB();
+const initialMe = getMe();
+if (initialMe && (initialMe.status === 'approved' || initialMe.role === 'admin')) {
+  route(initialMe.role === 'admin' ? 'admin' : 'members');
+} else {
+  route('home');
+}
+</script>
+</body>
+</html>
