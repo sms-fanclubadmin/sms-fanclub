@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michas Knock Knock Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --orange:#FF6B1A; --orange-dark:#E5570F;
+  --green:#1FAF3D; --green-dark:#157A28; --green-darker:#0E521B;
+  --coin:#FFB400; --coin-dark:#B07F00;
+  --white:#FFFFFF; --cream:#FFF5E8;
+  --text:#1F0E03; --text-light:#5C3818; --text-muted:#8A6A45;
+  --cream-bg:#FAF5ED; --cream-deep:#F0E6D2; --cream-line:#E5D6BB;
+  --warm-dark:#2A1F12; --warm-mid:#5A3F22;
+  --radius:14px; --radius-sm:8px; --radius-lg:20px;
+  --shadow-sm:0 2px 8px rgba(31,14,3,.10);
+  --shadow:0 8px 24px rgba(31,14,3,.18);
+  --shadow-lg:0 16px 40px rgba(31,14,3,.22);
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --font-display:'Bebas Neue','Anton','Impact',sans-serif;
+  --font-serif:'DM Serif Display','Playfair Display',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#1a0f06;color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none;cursor:pointer}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:14px}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+.prem-login{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;overflow:hidden}
+.prem-login-bg{position:absolute;inset:0;background:radial-gradient(1200px 800px at 20% 10%,#6b3a14 0%,transparent 60%),radial-gradient(900px 700px at 85% 90%,#8a4517 0%,transparent 60%),linear-gradient(140deg,#1a0f06 0%,#3a200c 45%,#6b3a14 100%);z-index:0}
+.prem-login-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(600px 400px at 60% 30%,rgba(255,107,26,.18),transparent 70%);pointer-events:none}
+.prem-login-shell{position:relative;z-index:1;max-width:520px;width:100%;display:flex;flex-direction:column;align-items:center;gap:26px}
+.prem-login-logo{width:340px;max-width:100%;background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 20px 60px rgba(0,0,0,.35);border:2px solid rgba(255,107,26,.35)}
+.prem-login-brand{text-align:center;color:#fff;margin-bottom:4px}
+.prem-login-eyebrow-top{font-size:11px;letter-spacing:4px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:8px}
+.prem-login-brand-title{font-family:var(--font-serif);font-weight:400;font-size:clamp(30px,4.2vw,44px);line-height:1.05;letter-spacing:-.5px}
+.prem-login-brand-title em{font-style:italic;color:var(--orange)}
+.prem-login-divider{display:flex;align-items:center;justify-content:center;gap:8px;margin:2px 0}
+.prem-login-divider::before,.prem-login-divider::after{content:"";height:1px;flex:1;max-width:60px;background:rgba(255,255,255,.2)}
+.prem-login-divider span{width:10px;height:10px;border-radius:50%;background:var(--orange);box-shadow:0 0 12px var(--orange)}
+.prem-login-card{width:100%;background:#fff;border-radius:12px;border:1px solid rgba(255,107,26,.35);border-top:3px solid var(--orange);padding:40px 36px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.prem-login-eyebrow{font-size:11px;letter-spacing:3px;font-weight:700;color:var(--orange-dark);text-transform:uppercase;margin-bottom:10px;text-align:center}
+.prem-login-title{font-family:var(--font-serif);font-weight:400;font-size:30px;color:var(--warm-dark);text-align:center;letter-spacing:-.5px;margin-bottom:6px}
+.prem-login-sub{font-size:14px;color:var(--warm-mid);text-align:center;margin-bottom:26px}
+.prem-form{display:flex;flex-direction:column;gap:18px}
+.prem-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--warm-mid);margin-bottom:6px;display:block}
+.prem-input{width:100%;padding:10px 2px;background:transparent;border:none;border-bottom:1.5px solid var(--cream-line);font-size:15px;color:var(--warm-dark);outline:none;transition:border-color .2s}
+.prem-input:focus{border-bottom-color:var(--orange)}
+.prem-input::placeholder{color:var(--text-muted)}
+.prem-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:600;font-size:14px;letter-spacing:.3px;transition:transform .15s,box-shadow .15s,background .15s;text-align:center;line-height:1.2}
+.prem-btn:hover{transform:translateY(-1px)}
+.prem-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.prem-btn-primary{background:var(--warm-dark);color:#fff}
+.prem-btn-primary:hover{background:#3a2b18}
+.prem-btn-orange{background:var(--orange);color:#fff;box-shadow:0 8px 22px -8px rgba(255,107,26,.55)}
+.prem-btn-orange:hover{background:var(--orange-dark);box-shadow:0 12px 30px -8px rgba(255,107,26,.65)}
+.prem-btn-coin{background:var(--coin);color:#3a2600}
+.prem-btn-coin:hover{background:#e5a300}
+.prem-btn-ghost{background:transparent;color:var(--warm-dark);border:1px solid var(--cream-line)}
+.prem-btn-ghost:hover{background:var(--cream-bg)}
+.prem-btn-danger{background:#C81E1E;color:#fff}
+.prem-btn-danger:hover{background:#a51818}
+.prem-btn-sm{padding:8px 14px;font-size:12px}
+.prem-btn-block{width:100%;justify-content:center}
+.prem-login-foot{margin-top:22px;text-align:center;font-size:13px;color:var(--warm-mid)}
+.prem-link-quiet{color:var(--orange-dark);cursor:pointer;font-weight:600}
+.prem-link-quiet:hover{text-decoration:underline}
+.prem-login-meta{margin-top:20px;text-align:center;font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.5px}
+.prem-alert{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;line-height:1.4}
+.prem-alert.show{display:block}
+.prem-alert.error{background:rgba(200,30,30,.10);color:#8a1414;border:1px solid rgba(200,30,30,.30)}
+.prem-alert.success{background:rgba(31,175,61,.12);color:var(--green-darker);border:1px solid rgba(31,175,61,.30)}
+.prem-alert.coin{background:rgba(255,180,0,.15);color:#6b4c00;border:1px solid rgba(255,180,0,.35)}
+
+/* ============================================================
+   IN-APP CHROME (Topbar / Footer)
+   ============================================================ */
+body.in-app{background:var(--cream-bg);color:var(--text)}
+.in-app .topbar{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 40px;background:rgba(250,245,237,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--cream-line)}
+.in-app .prem-brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+.in-app .prem-brand-logo{width:52px;height:52px;background:#fff;border-radius:10px;padding:6px;box-shadow:var(--shadow-sm);flex-shrink:0}
+.in-app .prem-brand-logo img{width:100%;height:100%;object-fit:contain}
+.in-app .prem-brand-text strong{display:block;font-family:var(--font-display);font-size:20px;color:var(--warm-dark);letter-spacing:1.5px;line-height:1}
+.in-app .prem-brand-text span{display:block;font-size:11px;color:var(--warm-mid);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-top:2px}
+.in-app .prem-nav-side{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.in-app .topnav{display:flex;gap:4px;flex-wrap:wrap}
+.in-app .topnav button{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;color:var(--warm-mid);background:transparent;transition:background .15s,color .15s}
+.in-app .topnav button:hover{background:rgba(255,107,26,.10);color:var(--orange-dark)}
+.in-app .topnav button.active{background:var(--warm-dark);color:#fff}
+.in-app .coin-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#fff;border:1px solid var(--cream-line);border-radius:999px;font-weight:700;color:var(--coin-dark);font-size:14px;cursor:pointer;box-shadow:var(--shadow-sm)}
+.in-app .coin-chip:hover{border-color:var(--coin)}
+
+/* ============================================================
+   PREMIUM SECTIONS
+   ============================================================ */
+.prem-hero{padding:120px 40px 60px;max-width:1280px;margin:0 auto;position:relative}
+.prem-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:3px;font-weight:700;color:var(--orange-dark);margin-bottom:16px}
+.prem-hero h1{font-family:var(--font-serif);font-weight:400;font-size:clamp(42px,6vw,72px);line-height:1.02;color:var(--warm-dark);letter-spacing:-1px;margin-bottom:18px}
+.prem-hero h1 em{font-style:italic;color:var(--orange-dark)}
+.prem-hero-lead{font-size:17px;line-height:1.6;color:var(--warm-mid);max-width:640px}
+.prem-section{padding:60px 40px;max-width:1280px;margin:0 auto}
+.prem-section-head{margin-bottom:32px}
+.prem-section-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:3px;font-weight:700;color:var(--orange-dark);margin-bottom:12px}
+.prem-section-head h2{font-family:var(--font-serif);font-weight:400;font-size:clamp(28px,3.4vw,40px);line-height:1.1;color:var(--warm-dark);letter-spacing:-.5px}
+.prem-section-head h2 em{font-style:italic;color:var(--orange-dark)}
+.prem-card{background:#fff;border:1px solid var(--cream-line);border-radius:14px;padding:28px;box-shadow:0 8px 24px -14px rgba(42,31,18,.15)}
+.prem-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.prem-grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+@media(max-width:900px){.prem-grid-2{grid-template-columns:1fr}.prem-hero{padding:80px 24px 40px}.prem-section{padding:40px 24px}.in-app .topbar{padding:12px 20px}}
+
+/* Balance */
+.prem-balance{display:flex;align-items:center;gap:22px;background:linear-gradient(135deg,#fff 0%,#fffaf0 100%);border:1px solid var(--cream-line);border-radius:16px;padding:24px 28px;box-shadow:0 10px 30px -18px rgba(42,31,18,.28);margin-bottom:40px}
+.prem-balance-coin{width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffdd6b,var(--coin) 70%,var(--coin-dark));display:flex;align-items:center;justify-content:center;color:#3a2600;font-weight:900;font-family:var(--font-display);font-size:22px;letter-spacing:1px;flex-shrink:0;box-shadow:inset 0 -6px 12px rgba(0,0,0,.15)}
+.prem-balance-body{flex:1}
+.prem-balance-label{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;color:var(--warm-mid);margin-bottom:4px}
+.prem-balance-num{font-family:var(--font-serif);font-weight:400;font-size:44px;line-height:1;color:var(--warm-dark);letter-spacing:-.5px}
+.prem-balance-meta{font-size:13px;color:var(--warm-mid);margin-top:6px}
+
+/* Tiles */
+.prem-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.prem-tiles{grid-template-columns:1fr}}
+.prem-tile{background:#fff;border:1px solid var(--cream-line);border-radius:14px;padding:28px 26px;cursor:pointer;transition:transform .18s,box-shadow .18s;position:relative;overflow:hidden}
+.prem-tile:hover{transform:translateY(-4px);box-shadow:0 20px 40px -22px rgba(42,31,18,.30)}
+.prem-tile-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;color:var(--orange-dark);margin-bottom:10px}
+.prem-tile h3{font-family:var(--font-serif);font-weight:400;font-size:28px;color:var(--warm-dark);letter-spacing:-.3px;line-height:1.1;margin-bottom:10px}
+.prem-tile p{font-size:14px;color:var(--warm-mid);line-height:1.55;margin-bottom:22px}
+.prem-tile-cta{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--orange-dark);text-transform:uppercase;letter-spacing:1.5px}
+.prem-tile-cta::after{content:"→";transition:transform .18s}
+.prem-tile:hover .prem-tile-cta::after{transform:translateX(4px)}
+
+/* Form card */
+.prem-form-card{background:#fff;border:1px solid var(--cream-line);border-radius:14px;padding:32px;box-shadow:0 8px 24px -14px rgba(42,31,18,.15)}
+.prem-form-card h3{font-family:var(--font-serif);font-weight:400;font-size:24px;color:var(--warm-dark);margin-bottom:8px}
+.prem-form-card p.hint{font-size:13px;color:var(--warm-mid);line-height:1.55;margin-bottom:20px}
+.prem-form-card ol,.prem-form-card ul{padding-left:20px;color:var(--warm-mid);font-size:14px;line-height:1.9}
+.prem-form-card ol li,.prem-form-card ul li{margin-bottom:4px}
+.prem-form-card select,.prem-form-card textarea{width:100%;padding:10px 2px;background:transparent;border:none;border-bottom:1.5px solid var(--cream-line);font-size:15px;color:var(--warm-dark);outline:none;transition:border-color .2s;font-family:inherit}
+.prem-form-card select:focus,.prem-form-card textarea:focus{border-bottom-color:var(--orange)}
+.prem-form-card textarea{resize:vertical;min-height:90px;padding:12px}
+
+/* Table */
+.prem-table-wrap{overflow-x:auto;background:#fff;border:1px solid var(--cream-line);border-radius:14px;box-shadow:0 8px 24px -14px rgba(42,31,18,.15)}
+.prem-table{width:100%;border-collapse:collapse;font-size:13px}
+.prem-table th{text-align:left;padding:14px 18px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--warm-mid);border-bottom:1px solid var(--cream-line);background:#fbf7ee}
+.prem-table td{padding:14px 18px;border-bottom:1px solid var(--cream-line);color:var(--warm-dark);vertical-align:middle}
+.prem-table tr:last-child td{border-bottom:none}
+.prem-table .actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+/* Pill */
+.prem-pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.prem-pill.pending{background:rgba(255,180,0,.20);color:#8a5f00}
+.prem-pill.approved{background:rgba(31,175,61,.18);color:var(--green-darker)}
+.prem-pill.rejected{background:rgba(200,30,30,.15);color:#8a1414}
+.prem-pill.admin{background:var(--warm-dark);color:#fff}
+
+/* Merch */
+.prem-merch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+.prem-merch{background:#fff;border:1px solid var(--cream-line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s}
+.prem-merch:hover{transform:translateY(-3px);box-shadow:0 18px 36px -20px rgba(42,31,18,.30)}
+.prem-merch-img{aspect-ratio:4/5;background:linear-gradient(135deg,var(--cream) 0%,var(--cream-deep) 100%);display:flex;align-items:center;justify-content:center;font-size:80px}
+.prem-merch-body{padding:22px;display:flex;flex-direction:column;flex:1;gap:8px}
+.prem-merch-cat{font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--orange-dark)}
+.prem-merch-body h3{font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);letter-spacing:-.2px}
+.prem-merch-desc{font-size:13px;color:var(--warm-mid);line-height:1.5;flex:1}
+.prem-merch-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--cream-line)}
+.prem-merch-price{font-family:var(--font-serif);font-weight:400;font-size:22px;color:var(--coin-dark);display:inline-flex;align-items:center;gap:6px}
+.prem-merch-stock{font-size:11px;color:var(--warm-mid);text-transform:uppercase;letter-spacing:1px}
+
+/* Mega */
+.prem-mega{background:var(--warm-dark);color:#fff;border-radius:20px;padding:48px 44px;display:flex;justify-content:space-between;align-items:center;gap:32px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 20px 60px -30px rgba(0,0,0,.55);transition:transform .2s}
+.prem-mega:hover{transform:translateY(-2px)}
+.prem-mega::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--orange) 0%,var(--coin) 50%,var(--green) 100%)}
+.prem-mega-label{font-size:11px;text-transform:uppercase;letter-spacing:3px;font-weight:700;color:var(--coin);margin-bottom:14px}
+.prem-mega h2{font-family:var(--font-serif);font-weight:400;font-size:clamp(28px,3.8vw,44px);line-height:1.05;letter-spacing:-.5px;margin-bottom:14px}
+.prem-mega h2 em{font-style:italic;color:var(--coin)}
+.prem-mega p{font-size:15px;color:rgba(255,255,255,.75);line-height:1.55;max-width:520px}
+.prem-mega-arrow{width:64px;height:64px;background:var(--coin);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--warm-dark);font-size:28px;flex-shrink:0;box-shadow:0 10px 24px -8px rgba(255,180,0,.55)}
+
+/* Bikes */
+.prem-bike-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+.prem-bike{background:#fff;border:1px solid var(--cream-line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s}
+.prem-bike:hover{transform:translateY(-3px);box-shadow:0 18px 36px -20px rgba(42,31,18,.30)}
+.prem-bike-img{aspect-ratio:4/3;background:linear-gradient(135deg,var(--cream) 0%,var(--cream-deep) 100%);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.prem-bike-img img{width:100%;height:100%;object-fit:contain;padding:14px}
+.prem-bike-body{padding:22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.prem-bike-tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;align-self:flex-start}
+.prem-bike-tag.bikera{background:rgba(255,107,26,.15);color:var(--orange-dark)}
+.prem-bike-tag.johansson{background:rgba(31,175,61,.15);color:var(--green-darker)}
+.prem-bike-body h4{font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);letter-spacing:-.2px;line-height:1.15}
+.prem-bike-variant{font-size:13px;color:var(--warm-mid)}
+.prem-bike-motor{font-size:12px;color:var(--warm-mid);display:inline-flex;align-items:center;gap:6px}
+.prem-bike-prices{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:6px;padding-top:10px;border-top:1px solid var(--cream-line)}
+.prem-bike-uvp{font-size:13px;color:var(--warm-mid);text-decoration:line-through}
+.prem-bike-ff{font-family:var(--font-serif);font-weight:400;font-size:24px;color:var(--warm-dark)}
+.prem-bike-save{background:var(--coin);color:var(--warm-dark);padding:3px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:1px}
+
+/* Filter bar */
+.prem-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.prem-filter-bar button{padding:8px 18px;border-radius:999px;background:#fff;border:1px solid var(--cream-line);font-size:13px;font-weight:600;color:var(--warm-mid);transition:background .15s,color .15s,border-color .15s}
+.prem-filter-bar button:hover{border-color:var(--orange)}
+.prem-filter-bar button.active{background:var(--warm-dark);color:#fff;border-color:var(--warm-dark)}
+
+/* Challenges */
+.prem-challenges{display:flex;flex-direction:column;gap:22px;margin-bottom:40px}
+.prem-challenge{position:relative;background:linear-gradient(135deg,var(--warm-dark) 0%,#3a2b18 100%);color:#fff;border-radius:16px;padding:32px 34px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(0,0,0,.45)}
+.prem-challenge::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--orange) 0%,var(--coin) 50%,var(--green) 100%)}
+.prem-challenge::after{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,180,0,.30),transparent 65%);pointer-events:none}
+.prem-challenge-eyebrow{font-size:11px;letter-spacing:2.5px;font-weight:700;color:var(--coin);text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
+.prem-challenge-title{font-family:var(--font-serif);font-weight:400;font-size:26px;color:#fff;letter-spacing:-.3px;margin-bottom:10px;position:relative;z-index:1;line-height:1.15}
+.prem-challenge-desc{font-size:14px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:18px;max-width:640px;position:relative;z-index:1}
+.prem-challenge-reward{display:inline-flex;align-items:center;gap:10px;background:rgba(255,180,0,.15);border:1px solid rgba(255,180,0,.40);padding:8px 16px;border-radius:999px;position:relative;z-index:1}
+.prem-challenge-reward-label{font-size:10px;color:var(--coin);text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+.prem-challenge-reward-value{font-family:var(--font-serif);font-size:15px;color:#fff}
+.prem-challenge-deadline{margin-top:14px;font-size:12px;color:rgba(255,255,255,.6);display:inline-flex;align-items:center;gap:8px;position:relative;z-index:1}
+.prem-challenge-deadline::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--orange)}
+
+/* Compose + Ann List */
+.prem-compose{background:#fff;border:1px solid var(--cream-line);border-radius:14px;padding:28px;margin-bottom:20px;box-shadow:0 8px 24px -14px rgba(42,31,18,.15)}
+.prem-compose h3{font-family:var(--font-serif);font-weight:400;font-size:22px;color:var(--warm-dark);margin-bottom:14px}
+.prem-compose .prem-form{gap:14px}
+.prem-compose textarea,.prem-compose select{width:100%;padding:10px 2px;background:transparent;border:none;border-bottom:1.5px solid var(--cream-line);font-size:15px;color:var(--warm-dark);outline:none;font-family:inherit}
+.prem-compose textarea:focus,.prem-compose select:focus{border-bottom-color:var(--orange)}
+.prem-compose textarea{resize:vertical;min-height:80px;padding:12px}
+.prem-ann-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.prem-ann-row{background:#fff;border:1px solid var(--cream-line);border-radius:12px;padding:20px 22px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.prem-ann-row.inactive{opacity:.5}
+.prem-ann-row h4{font-family:var(--font-serif);font-weight:400;font-size:19px;color:var(--warm-dark);margin-bottom:6px}
+.prem-ann-meta{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:var(--warm-mid);margin-bottom:6px}
+.prem-ann-reward{font-family:var(--font-serif);color:var(--coin-dark);font-size:15px;margin-top:4px}
+
+/* Footer */
+.prem-footer{background:#fff;border-top:1px solid var(--cream-line);margin-top:60px}
+.prem-footer-stripe{height:5px;background:linear-gradient(90deg,var(--orange) 0%,var(--coin) 50%,var(--green) 100%)}
+.prem-footer-inner{max-width:1280px;margin:0 auto;padding:40px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
+@media(max-width:900px){.prem-footer-inner{grid-template-columns:1fr;padding:32px 24px}}
+.prem-footer-logo{width:120px;background:#fff;border-radius:8px;padding:8px;border:1px solid var(--cream-line);margin-bottom:14px}
+.prem-footer h5{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;font-weight:700;color:var(--orange-dark);margin-bottom:14px}
+.prem-footer p{font-size:13px;color:var(--warm-mid);line-height:1.6}
+.prem-footer a{display:block;font-size:14px;color:var(--warm-dark);padding:4px 0;cursor:pointer}
+.prem-footer a:hover{color:var(--orange-dark)}
+.prem-footer-bottom{border-top:1px solid var(--cream-line);padding:18px 40px;text-align:center;font-size:12px;color:var(--warm-mid)}
+
+/* Confirmed / Pending */
+.prem-status{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.prem-status-card{background:#fff;border:1px solid var(--cream-line);border-radius:16px;padding:48px 40px;text-align:center;max-width:520px;width:100%;box-shadow:0 20px 50px -24px rgba(42,31,18,.25)}
+.prem-status-icon{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 22px}
+.prem-status-icon.gold{background:radial-gradient(circle at 35% 30%,#ffdd6b,var(--coin) 70%,var(--coin-dark));color:#3a2600}
+.prem-status-icon.grey{background:#e8e0d0;color:var(--warm-mid)}
+.prem-status-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:3px;font-weight:700;color:var(--orange-dark);margin-bottom:10px}
+.prem-status-title{font-family:var(--font-serif);font-weight:400;font-size:32px;color:var(--warm-dark);letter-spacing:-.3px;margin-bottom:14px;line-height:1.15}
+.prem-status-text{font-size:15px;color:var(--warm-mid);line-height:1.6;margin-bottom:26px}
+
+/* Register */
+.prem-register-wrap{min-height:100vh;background:var(--cream-bg);padding:60px 20px}
+.prem-register-inner{max-width:640px;margin:0 auto}
+.prem-register-head{text-align:center;margin-bottom:36px}
+.prem-register-logo{width:180px;margin:0 auto 24px;background:#fff;border-radius:10px;padding:12px;border:1px solid var(--cream-line)}
+.prem-register-card{background:#fff;border:1px solid var(--cream-line);border-top:3px solid var(--orange);border-radius:12px;padding:36px 32px;box-shadow:0 20px 50px -30px rgba(42,31,18,.30)}
+.prem-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:640px){.prem-form-grid{grid-template-columns:1fr}}
+.prem-notice{background:rgba(255,107,26,.08);border-left:3px solid var(--orange);padding:14px 18px;border-radius:8px;margin-bottom:22px;font-size:13px;color:var(--warm-dark);line-height:1.55}
+.prem-notice strong{color:var(--orange-dark);text-transform:uppercase;font-size:11px;letter-spacing:1.5px;display:block;margin-bottom:4px}
+
+/* AGB */
+.prem-agb{min-height:100vh;background:var(--cream-bg);padding:60px 24px}
+.prem-agb-shell{max-width:820px;margin:0 auto}
+.prem-agb-head{text-align:center;margin-bottom:36px}
+.prem-agb-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:3px;font-weight:700;color:var(--orange-dark);margin-bottom:14px}
+.prem-agb-title{font-family:var(--font-serif);font-weight:400;font-size:clamp(34px,4.5vw,52px);line-height:1.05;color:var(--warm-dark);letter-spacing:-.5px;margin-bottom:14px}
+.prem-agb-title em{font-style:italic;color:var(--orange-dark)}
+.prem-agb-sub{color:var(--warm-mid);font-size:15px;line-height:1.65;max-width:600px;margin:0 auto}
+.prem-agb-scroll{background:#fff;border:1px solid var(--cream-line);border-radius:8px;padding:40px 44px;max-height:560px;overflow-y:auto;box-shadow:0 12px 32px -14px rgba(42,31,18,.16);margin-bottom:28px}
+.prem-agb-scroll h3{font-family:var(--font-serif);font-weight:400;font-size:19px;color:var(--warm-dark);margin:26px 0 10px;letter-spacing:-.2px}
+.prem-agb-scroll h3:first-child{margin-top:0}
+.prem-agb-scroll p{color:var(--warm-dark);font-size:14px;line-height:1.75;margin-bottom:12px}
+.prem-agb-scroll p.sub{color:var(--warm-mid);font-size:13px}
+.prem-agb-scroll ul{padding-left:22px;color:var(--warm-dark);font-size:14px;line-height:1.75;margin-bottom:12px}
+.prem-agb-scroll li{margin-bottom:6px}
+.prem-agb-check-row{display:flex;align-items:flex-start;gap:14px;background:#fff;border:1px solid var(--cream-line);border-radius:6px;padding:22px 24px;margin-bottom:20px;cursor:pointer}
+.prem-agb-check-row:hover{border-color:var(--orange)}
+.prem-agb-check-row input[type=checkbox]{width:22px;height:22px;accent-color:var(--orange);flex-shrink:0;margin-top:2px;cursor:pointer}
+.prem-agb-check-label{color:var(--warm-dark);font-size:14px;line-height:1.6}
+.prem-agb-check-label strong{color:var(--warm-dark)}
+.prem-agb-actions{display:flex;gap:14px;justify-content:flex-end;flex-wrap:wrap}
+
+.prem-hint{background:rgba(255,107,26,.08);border-left:3px solid var(--orange);padding:16px 20px;border-radius:8px;margin-bottom:26px;font-size:14px;color:var(--warm-dark);line-height:1.55}
+.prem-hint strong{color:var(--orange-dark);text-transform:uppercase;font-size:11px;letter-spacing:1.5px;display:block;margin-bottom:4px}
+.prem-hint a{color:var(--orange-dark);font-weight:600;text-decoration:underline}
+</style>
+</head>
+<body>
+<div id="topbarSlot"></div>
+<div id="app"></div>
+<div id="footerSlot"></div>
+<script>
+const SUPABASE_URL = 'https://vpihusddgqfharlatpig.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_P4Nr48r85hzNmo94YrWFcg_MM5p66-g';
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SMS_LOGO_SVG = `<img src="img/smslogo.png" alt="SMS Spedition Management Service GmbH" style="display:block;width:100%;height:auto;" onerror="this.onerror=null;this.src='img/SMSlogo.png';">`;
+const AGB_VERSION = '2026-07-01';
+const DEMO_KEY = 'demo_session_user';
+const isDemoMode = () => !!localStorage.getItem(DEMO_KEY);
+
+const DEMO_USERS = {
+  'admin@sms.local': { password: 'admin123', data: { id:'demo-admin', first_name:'SMS', last_name:'Admin', email:'admin@sms.local', private_email:'admin@sms.local', private_phone:'0711 794700-0', company:'SMS GmbH', city:'Stuttgart', role:'admin', status:'approved', coins:999999, agb_accepted_at: null } },
+  'kunde@sms.local': { password: 'kunde123', data: { id:'demo-kunde', first_name:'Max', last_name:'Mustermann', email:'kunde@sms.local', private_email:'kunde@sms.local', private_phone:'0151 12345678', company:'Mustermann Logistik GmbH', street:'Musterstraße 1', zip:'70173', city:'Stuttgart', role:'member', status:'approved', coins:20, agb_accepted_at: null } }
+};
+
+const DEMO_MERCH = [
+  { id:1,  name:'SMS T-Shirt',          description:'Original SMS-Logo, 100% Baumwolle, schwarz', emoji:'\u{1F455}',  stock:120, category:'Kleidung', coin_price:8 },
+  { id:2,  name:'SMS Hoodie',           description:'Schwerer Premium-Hoodie mit Logo',           emoji:'\u{1F9E5}',  stock:60,  category:'Kleidung', coin_price:18 },
+  { id:3,  name:'SMS Kapuzen-Pullover', description:'Sweatshirt mit aufgenähtem Logo',            emoji:'\u{1F9E5}',  stock:50,  category:'Kleidung', coin_price:17 },
+  { id:4,  name:'SMS Polo-Shirt',       description:'Klassisches Polo für den Büroalltag',        emoji:'\u{1F454}',  stock:80,  category:'Kleidung', coin_price:12 },
+  { id:5,  name:'SMS Cap',              description:'Trucker-Cap mit gesticktem SMS-Logo',        emoji:'\u{1F9E2}',  stock:100, category:'Kleidung', coin_price:7  },
+  { id:6,  name:'SMS Beanie',           description:'Strick-Mütze, einheitsgröße',                emoji:'\u{1F9E3}',  stock:80,  category:'Kleidung', coin_price:6  },
+  { id:7,  name:'SMS Kugelschreiber',   description:'Original-Werbe-Stift orange, mit Logo',      emoji:'\u{1F58A}️', stock:500, category:'Büro',     coin_price:1  },
+  { id:8,  name:'SMS Notizbuch A5',     description:'Hardcover-Notizbuch mit Lesezeichen',        emoji:'\u{1F4D3}',  stock:200, category:'Büro',     coin_price:5  },
+  { id:9,  name:'SMS Stoff-Tüte',       description:'Tragetasche mit Logo',                       emoji:'\u{1F45C}',  stock:300, category:'Büro',     coin_price:3  },
+  { id:10, name:'SMS Tasse',            description:'Kaffeebecher Keramik 350ml, schwarz',        emoji:'☕',  stock:150, category:'Büro',     coin_price:4  },
+  { id:11, name:'SMS Thermo-Becher',    description:'Edelstahl-Thermobecher 400ml',               emoji:'\u{1F964}',  stock:80,  category:'Büro',     coin_price:7  },
+  { id:12, name:'SMS Edelstahl-Flasche',description:'750ml doppelwandig',                         emoji:'\u{1F376}',  stock:60,  category:'Büro',     coin_price:7  },
+  { id:13, name:'SMS Aufkleber-Set',    description:'5er Vinyl-Aufkleber',                        emoji:'\u{1F3F7}️', stock:800, category:'Büro',     coin_price:2  },
+  { id:14, name:'SMS Schlüsselanhänger',description:'Robuster Metall-Anhänger',                   emoji:'\u{1F511}',  stock:300, category:'Büro',     coin_price:2  },
+  { id:15, name:'SMS USB-Stick 32GB',   description:'Im SMS-Design',                              emoji:'\u{1F4BE}',  stock:60,  category:'Tech',     coin_price:5  },
+  { id:16, name:'SMS Powerbank 10000',  description:'10.000 mAh, USB-C',                          emoji:'\u{1F50B}',  stock:40,  category:'Tech',     coin_price:12 }
+];
+
+const DEMO_BIKES = [
+  { brand:'Bikera', name:'Moto 2', variant:'unisize', uvp_eur:3299, ff_price_eur:999, category:'City' },
+  { brand:'Bikera', name:'Eco City 2 LE CB', variant:'28" – S/M/L', motor:'E-Drive', uvp_eur:2599, ff_price_eur:1099, category:'E-City' },
+  { brand:'Bikera', name:'Towner B2 Wave', variant:'28" – S/M', uvp_eur:899, ff_price_eur:299, category:'City' },
+  { brand:'Bikera', name:'Towner B3 Lady', variant:'28" – S', uvp_eur:1299, ff_price_eur:499, category:'City' },
+  { brand:'Bikera', name:'Crosser 1 Wave', variant:'27.5" – M', motor:'E-Drive', uvp_eur:2999, ff_price_eur:1499, category:'E-Crosser' },
+  { brand:'Bikera', name:'Cross Tourer CT1', variant:'27.5" – S/M', motor:'E-Drive', uvp_eur:3499, ff_price_eur:1499, category:'E-Trekking' },
+  { brand:'Bikera', name:'Nyberg Trevlig', variant:'28" – 44/49/54 cm', uvp_eur:2999, ff_price_eur:1599, category:'Trekking' },
+  { brand:'Bikera', name:'Nyberg Sportig', variant:'28" – 49/53/57 cm', uvp_eur:2499, ff_price_eur:999, category:'Sport' },
+  { brand:'Bikera', name:'Superfast XRE 75', variant:'29" – 43/48/53', uvp_eur:2449, ff_price_eur:999, category:'E-Sport' },
+  { brand:'Bikera', name:'Superfast TXE 75', variant:'29" – 43/48/53', uvp_eur:2899, ff_price_eur:1099, category:'E-Sport' },
+  { brand:'Bikera', name:'Johansson Finn', variant:'20" unisize', uvp_eur:1599, ff_price_eur:999, category:'Kompakt' },
+  { brand:'Johansson', name:'Oscar S Vario Box', variant:'Enviolo Cargo', motor:'Brose T, 70 Nm', uvp_eur:6878, ff_price_eur:1799, category:'Cargo' },
+  { brand:'Johansson', name:'Oscar S Vario Box', variant:'Enviolo Cargo', motor:'Brose S, 90 Nm', uvp_eur:7078, ff_price_eur:1899, category:'Cargo' },
+  { brand:'Johansson', name:'Oscar M Vario Box', variant:'Enviolo Cargo', motor:'Brose S, 90 Nm', uvp_eur:7368, ff_price_eur:1899, category:'Cargo' },
+  { brand:'Johansson', name:'Gunnar Vario Box', variant:'Enviolo Cargo', motor:'Brose T, 70 Nm', uvp_eur:5868, ff_price_eur:1499, category:'Cargo' },
+  { brand:'Johansson', name:'Gunnar Vario Box', variant:'Enviolo Cargo', motor:'Brose S, 90 Nm', uvp_eur:6068, ff_price_eur:1599, category:'Cargo' },
+  { brand:'Johansson', name:'Fiete Vario Box', variant:'L-TWOO 9-Gang', motor:'Brose T, 70 Nm', uvp_eur:4958, ff_price_eur:1299, category:'Cargo' },
+  { brand:'Johansson', name:'Fiete Vario Box', variant:'L-TWOO 9-Gang', motor:'Brose S, 90 Nm', uvp_eur:5158, ff_price_eur:1399, category:'Cargo' },
+  { brand:'Johansson', name:'Fiete Vario Dog', variant:'L-TWOO 9-Gang', motor:'Brose T, 70 Nm', uvp_eur:4958, ff_price_eur:1299, category:'Cargo' },
+  { brand:'Johansson', name:'Finja Vario Dog', variant:'Enviolo Cargo', motor:'Brose S, 90 Nm', uvp_eur:5658, ff_price_eur:1499, category:'Cargo' },
+  { brand:'Johansson', name:'Finja Vario Box', variant:'Enviolo Cargo', motor:'Brose S, 90 Nm', uvp_eur:5658, ff_price_eur:1499, category:'Cargo' }
+];
+
+const DEMO_MEMBERS = [
+  { id:'demo-admin', first_name:'SMS', last_name:'Admin', email:'admin@sms.local', private_email:'admin@sms.local', private_phone:'0711 794700-0', company:'SMS GmbH', role:'admin', status:'approved', coins:0, created_at:'2026-01-15T08:00:00Z' },
+  { id:'demo-kunde', first_name:'Max', last_name:'Mustermann', email:'kunde@sms.local', private_email:'kunde@sms.local', private_phone:'0151 12345678', company:'Mustermann Logistik GmbH', role:'member', status:'approved', coins:20, created_at:'2026-03-08T11:30:00Z' },
+  { id:'demo-pending', first_name:'Anna', last_name:'Schmidt', email:'anna@example.com', private_email:'anna@email.de', private_phone:'0176 98765432', company:'Schmidt Transport GbR', role:'member', status:'pending', coins:0, created_at:'2026-06-12T14:22:00Z' }
+];
+
+const DEMO_REQUESTS = [
+  { id:1, member_id:'demo-kunde', order_number:'SMS-2026-12345', member_note:'Lieferung Berlin', status:'pending', coins_awarded:null, created_at:'2026-06-10T09:15:00Z', member:{first_name:'Max',last_name:'Mustermann',email:'kunde@sms.local'} },
+  { id:2, member_id:'demo-kunde', order_number:'SMS-2026-12100', member_note:null, status:'approved', coins_awarded:15, created_at:'2026-05-28T16:40:00Z', member:{first_name:'Max',last_name:'Mustermann',email:'kunde@sms.local'} }
+];
+
+const DEMO_TRANSACTIONS = [
+  { id:1, member_id:'demo-kunde', amount:15, type:'order_reward', order_number:'SMS-2026-12100', description:'Auftrag #SMS-2026-12100 freigegeben', created_at:'2026-05-28T16:42:00Z', member:{first_name:'Max',last_name:'Mustermann',email:'kunde@sms.local'} },
+  { id:2, member_id:'demo-kunde', amount:5, type:'admin_grant', order_number:null, description:'Begrüßungsbonus', created_at:'2026-03-08T11:32:00Z', member:{first_name:'Max',last_name:'Mustermann',email:'kunde@sms.local'} }
+];
+
+const DEMO_ANNOUNCEMENTS = [
+  { id:1, title:'Pharma-Champion Juli 2026', description:'Wer als Knock-Knock-Club-Mitglied bis 31.07. die meisten Pharma-Aufträge bei SMS abwickelt, holt sich den Hauptpreis.', reward:'98 Zoll OLED Fernseher', deadline:'2026-07-31', is_active:true, created_at:'2026-06-20T10:00:00Z' },
+  { id:2, title:'Sommer-Tipp', description:'Im Juli und August gibt es doppelte Maverick Coins auf alle Express-Aufträge nach Italien. Einfach normal einreichen — das SMS-Team rechnet hoch.', reward:'Doppelte Coins', deadline:null, is_active:true, created_at:'2026-06-15T09:00:00Z' }
+];
+
+let me = null;
+
+function fmtNum(n){ return new Intl.NumberFormat('de-DE').format(n||0); }
+function fmtEur(n){ return new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n||0)+' €'; }
+function fmtDate(s){ return s ? new Date(s).toLocaleString('de-DE') : '–'; }
+function fmtDay(s){ return s ? new Date(s).toLocaleDateString('de-DE') : '–'; }
+
+function bikeImage(name){
+  if (!name) return null;
+  if (name === 'Moto 2') return 'img/Moto2.png';
+  if (name === 'Eco City 2 LE CB') return 'img/ECOCITY2LE.png';
+  if (name === 'Towner B2 Wave') return 'img/TOWNERB2.png';
+  return null;
+}
+
+async function loadMe(){
+  const demoEmail = localStorage.getItem(DEMO_KEY);
+  if (demoEmail && DEMO_USERS[demoEmail]){
+    me = JSON.parse(JSON.stringify(DEMO_USERS[demoEmail].data));
+    return me;
+  }
+  const { data: { user } } = await supa.auth.getUser();
+  if (!user){ me = null; return null; }
+  const { data: member } = await supa.from('members').select('*').eq('id', user.id).single();
+  me = member || null;
+  return me;
+}
+
+function renderTopbar(active){
+  const slot = document.getElementById('topbarSlot');
+  if (!me || (me.status !== 'approved' && me.role !== 'admin')){ slot.innerHTML=''; return; }
+  const items = [{key:'members',label:'Clubhaus'},{key:'coins',label:'Coins'},{key:'shop',label:'Shop'},{key:'codes',label:'Angebote'}];
+  if (me.role === 'admin') items.push({key:'admin',label:'Admin'});
+  items.push({key:'logout',label:'Logout'});
+  slot.innerHTML = `
+    <div class="topbar">
+      <div class="prem-brand" onclick="route('members')">
+        <div class="prem-brand-logo">${SMS_LOGO_SVG}</div>
+        <div class="prem-brand-text"><strong>KNOCK KNOCK</strong><span>SMS Fan Club</span></div>
+      </div>
+      <div class="prem-nav-side">
+        <div class="coin-chip" onclick="route('coins')">
+          <span style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffdd6b,var(--coin) 70%,var(--coin-dark));display:inline-block;"></span>
+          <span>${fmtNum(me.coins||0)} <span style="font-size:10px;">MC</span></span>
+        </div>
+        <nav class="topnav">
+          ${items.map(i => {
+            const cls = active === i.key ? 'active' : '';
+            if (i.key === 'logout') return `<button class="${cls}" onclick="doLogout()">${i.label}</button>`;
+            return `<button class="${cls}" onclick="route('${i.key}')">${i.label}</button>`;
+          }).join('')}
+        </nav>
+      </div>
+    </div>`;
+}
+
+function renderFooter(){
+  document.getElementById('footerSlot').innerHTML = `
+    <div class="prem-footer">
+      <div class="prem-footer-stripe"></div>
+      <div class="prem-footer-inner">
+        <div>
+          <div class="prem-footer-logo">${SMS_LOGO_SVG}</div>
+          <h5>Michas Knock Knock Club</h5>
+          <p>Der offizielle Fan Club der SMS Spedition Management Service GmbH. 1 Maverick Coin = 3 € Shop-Wert.</p>
+        </div>
+        <div>
+          <h5>Bereich</h5>
+          <a onclick="route('members')">Clubhaus</a>
+          <a onclick="route('coins')">Coins</a>
+          <a onclick="route('shop')">Shop</a>
+          <a onclick="route('bikera')">Bikera</a>
+          <a onclick="route('faq')">FAQ</a>
+        </div>
+        <div>
+          <h5>Rechtliches</h5>
+          <a onclick="route('impressum')">Impressum</a>
+          <a onclick="route('datenschutz')">Datenschutz</a>
+          <a onclick="route('agb')">AGB</a>
+        </div>
+      </div>
+      <div class="prem-footer-bottom">© ${new Date().getFullYear()} SMS Spedition Management Service GmbH</div>
+    </div>`;
+}
+
+async function doLogout(){
+  if (isDemoMode()){ localStorage.removeItem(DEMO_KEY); me = null; window.location.hash=''; route('home'); return; }
+  await supa.auth.signOut();
+  me = null; window.location.hash=''; route('home');
+}
+
+async function route(page){
+  window.scrollTo(0,0);
+  await loadMe();
+  const memberOnly = ['members','shop','codes','coins','bikera'];
+  const adminOnly = ['admin'];
+  if (memberOnly.includes(page)){
+    if (!me) page = 'home';
+    else if (me.status !== 'approved' && me.role !== 'admin') page = 'pending';
+  }
+  if (adminOnly.includes(page) && (!me || me.role !== 'admin')) page = !me ? 'home' : 'pending';
+  // AGB-Gate: eingeloggte, freigeschaltete Mitglieder müssen erst die AGB akzeptieren
+  if (me && (me.status === 'approved' || me.role === 'admin') && !me.agb_accepted_at && page !== 'agb' && page !== 'impressum' && page !== 'datenschutz' && page !== 'faq' && page !== 'home' && page !== 'register'){
+    page = 'agb';
+  }
+  const showTopbar = me && (me.status === 'approved' || me.role === 'admin') && me.agb_accepted_at;
+  if (showTopbar){ renderTopbar(page); renderFooter(); }
+  else { document.getElementById('topbarSlot').innerHTML=''; document.getElementById('footerSlot').innerHTML=''; }
+  const inAppPages = ['members','coins','shop','codes','bikera','admin','pending','confirmed','impressum','datenschutz','faq','agb'];
+  if (inAppPages.includes(page) && (me || page==='impressum' || page==='datenschutz' || page==='faq')) document.body.classList.add('in-app');
+  else document.body.classList.remove('in-app');
+  const views = { home:viewHome, register:viewRegister, pending:viewPending, confirmed:viewConfirmed, agb:viewAgb, members:viewMembers, coins:viewCoins, shop:viewShop, codes:viewCodes, bikera:viewBikera, admin:viewAdmin, impressum:viewImpressum, datenschutz:viewDatenschutz, faq:viewFaq };
+  document.getElementById('app').innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--warm-mid);">Lade…</div>';
+  const html = await (views[page] || viewHome)();
+  document.getElementById('app').innerHTML = html;
+  if (window.__afterRender){ try{ window.__afterRender(); } catch(e){ console.error(e); } window.__afterRender = null; }
+}
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+async function viewHome(){
+  if (me && (me.status === 'approved' || me.role === 'admin') && me.agb_accepted_at){
+    setTimeout(() => route(me.role === 'admin' ? 'admin' : 'members'), 0);
+    return '<div style="text-align:center;padding:60px 24px;color:#fff;">Weiterleitung…</div>';
+  }
+  if (me && (me.status === 'approved' || me.role === 'admin') && !me.agb_accepted_at){
+    setTimeout(() => route('agb'), 0);
+    return '<div style="text-align:center;padding:60px 24px;color:#fff;">Weiterleitung…</div>';
+  }
+  if (me && me.status === 'pending'){ setTimeout(() => route('pending'), 0); return '<div style="text-align:center;padding:60px 24px;color:#fff;">Weiterleitung…</div>'; }
+  window.__afterRender = () => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('alert');
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      if (DEMO_USERS[email] && DEMO_USERS[email].password === password){
+        localStorage.setItem(DEMO_KEY, email);
+        me = JSON.parse(JSON.stringify(DEMO_USERS[email].data));
+        a.className='prem-alert success show'; a.textContent='Login erfolgreich.';
+        setTimeout(() => route(me.agb_accepted_at ? (me.role === 'admin' ? 'admin' : 'members') : 'agb'), 400);
+        return;
+      }
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      const { error } = await supa.auth.signInWithPassword({ email, password });
+      btn.disabled = false; btn.textContent = 'Anmelden';
+      if (error){ a.className='prem-alert error show'; a.textContent='E-Mail oder Passwort falsch.'; return; }
+      await loadMe();
+      if (!me || (me.status !== 'approved' && me.role !== 'admin')){ setTimeout(() => route('pending'), 800); return; }
+      if (!me.agb_accepted_at){ setTimeout(() => route('agb'), 400); return; }
+      setTimeout(() => route(me.role === 'admin' ? 'admin' : 'members'), 400);
+    });
+  };
+  return `
+  <div class="prem-login">
+    <div class="prem-login-bg"></div>
+    <div class="prem-login-shell">
+      <div class="prem-login-logo">${SMS_LOGO_SVG}</div>
+      <div class="prem-login-brand">
+        <div class="prem-login-eyebrow-top">SMS Fanclub</div>
+        <div class="prem-login-brand-title">Michas <em>Knock Knock</em> Club</div>
+      </div>
+      <div class="prem-login-divider"><span></span></div>
+      <div class="prem-login-card">
+        <div class="prem-login-eyebrow">Zugang</div>
+        <h2 class="prem-login-title">Mitgliederbereich</h2>
+        <p class="prem-login-sub">Mit Ihren persönlichen Zugangsdaten anmelden.</p>
+        <div id="alert" class="prem-alert"></div>
+        <form id="loginForm" class="prem-form">
+          <div>
+            <label class="prem-label" for="email">E-Mail</label>
+            <input class="prem-input" type="email" id="email" required autocomplete="email">
+          </div>
+          <div>
+            <label class="prem-label" for="password">Passwort</label>
+            <input class="prem-input" type="password" id="password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="prem-btn prem-btn-orange prem-btn-block" style="margin-top:8px;">Anmelden</button>
+        </form>
+        <div class="prem-login-foot">
+          Noch kein Zugang? <span class="prem-link-quiet" onclick="route('register')">Antrag auf Zugang stellen →</span>
+        </div>
+      </div>
+      <div class="prem-login-meta">SMS Spedition Management Service GmbH</div>
+    </div>
+  </div>`;
+}
+
+async function viewRegister(){
+  window.__afterRender = () => {
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('alert');
+      const btn = e.target.querySelector('button[type=submit]');
+      const v = {};
+      ['firstName','lastName','company','street','zip','city','country','privateEmail','privatePhone','password','password2'].forEach(f => v[f] = document.getElementById(f).value.trim());
+      if (v.password !== v.password2){ a.className='prem-alert error show'; a.textContent='Passwörter stimmen nicht überein.'; return; }
+      if (v.password.length < 6){ a.className='prem-alert error show'; a.textContent='Passwort muss min. 6 Zeichen haben.'; return; }
+      if (!v.privatePhone || !v.privateEmail){ a.className='prem-alert error show'; a.textContent='Private Tel und E-Mail sind Pflicht.'; return; }
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      const { error } = await supa.auth.signUp({
+        email: v.privateEmail.toLowerCase(), password: v.password,
+        options: {
+          data: { first_name: v.firstName, last_name: v.lastName, company: v.company, street: v.street, zip: v.zip, city: v.city, country: v.country || 'Deutschland', phone: v.privatePhone, private_email: v.privateEmail, private_phone: v.privatePhone },
+          emailRedirectTo: window.location.origin + '/#confirmed'
+        }
+      });
+      btn.disabled = false; btn.textContent = 'Antrag absenden';
+      if (error){ a.className='prem-alert error show'; a.textContent = error.message.includes('already registered') ? 'Diese E-Mail ist bereits registriert.' : ('Fehler: ' + error.message); return; }
+      a.className='prem-alert success show';
+      a.innerHTML = 'Antrag eingegangen. Bestätigungs-E-Mail geschickt.';
+      document.getElementById('registerForm').reset();
+    });
+  };
+  return `
+  <div class="prem-register-wrap">
+    <div class="prem-register-inner">
+      <div class="prem-register-head">
+        <div class="prem-register-logo">${SMS_LOGO_SVG}</div>
+        <div class="prem-eyebrow" style="text-align:center;">Antrag auf Zugang</div>
+        <h1 style="font-family:var(--font-serif);font-weight:400;font-size:clamp(34px,4.5vw,52px);line-height:1.05;color:var(--warm-dark);letter-spacing:-.5px;margin-bottom:12px;">Mitglied <em style="font-style:italic;color:var(--orange-dark);">werden.</em></h1>
+        <p style="color:var(--warm-mid);font-size:15px;line-height:1.65;max-width:520px;margin:0 auto;">Trag deine Daten ein — das SMS-Team kümmert sich um die Verifizierung.</p>
+      </div>
+      <div class="prem-register-card">
+        <div id="alert" class="prem-alert"></div>
+        <form id="registerForm" class="prem-form">
+          <div class="prem-form-grid">
+            <div><label class="prem-label">Vorname *</label><input class="prem-input" type="text" id="firstName" required></div>
+            <div><label class="prem-label">Nachname *</label><input class="prem-input" type="text" id="lastName" required></div>
+          </div>
+          <div><label class="prem-label">Firma (optional)</label><input class="prem-input" type="text" id="company"></div>
+          <div><label class="prem-label">Straße &amp; Hausnummer</label><input class="prem-input" type="text" id="street"></div>
+          <div class="prem-form-grid">
+            <div><label class="prem-label">PLZ</label><input class="prem-input" type="text" id="zip"></div>
+            <div><label class="prem-label">Ort</label><input class="prem-input" type="text" id="city"></div>
+          </div>
+          <div><label class="prem-label">Land</label><input class="prem-input" type="text" id="country" value="Deutschland"></div>
+          <div class="prem-notice">
+            <strong>Private Kontaktdaten</strong>
+            Bitte deine <strong>private</strong> Telefonnummer und E-Mail — nicht die geschäftliche.
+          </div>
+          <div class="prem-form-grid">
+            <div><label class="prem-label">Private E-Mail *</label><input class="prem-input" type="email" id="privateEmail" required></div>
+            <div><label class="prem-label">Private Telefonnummer *</label><input class="prem-input" type="tel" id="privatePhone" required></div>
+          </div>
+          <div class="prem-form-grid">
+            <div><label class="prem-label">Passwort * (min. 6)</label><input class="prem-input" type="password" id="password" required minlength="6"></div>
+            <div><label class="prem-label">Wiederholen *</label><input class="prem-input" type="password" id="password2" required minlength="6"></div>
+          </div>
+          <button type="submit" class="prem-btn prem-btn-orange prem-btn-block" style="margin-top:10px;">Antrag absenden</button>
+          <div class="prem-login-foot">Schon Mitglied? <span class="prem-link-quiet" onclick="route('home')">Einloggen →</span></div>
+        </form>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function viewConfirmed(){
+  window.__afterRender = async () => {
+    await loadMe();
+    if (me && !isDemoMode()){
+      try { await fetch('/api/notify-admin', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ firstName: me.first_name, lastName: me.last_name, email: me.email, company: me.company, phone: me.private_phone || me.phone, city: me.city }) }); } catch(e){ console.warn(e); }
+    }
+  };
+  return `
+  <div class="prem-status">
+    <div class="prem-status-card">
+      <div class="prem-status-icon gold">✓</div>
+      <div class="prem-status-eyebrow">Bestätigt</div>
+      <h2 class="prem-status-title">E-Mail verifiziert.</h2>
+      <p class="prem-status-text">Das SMS-Team kümmert sich jetzt um die Freischaltung Ihres Accounts. Sobald der Zugang freigeschaltet ist, informieren wir Sie per E-Mail.</p>
+      <button class="prem-btn prem-btn-orange" onclick="route('pending')">Status ansehen</button>
+    </div>
+  </div>`;
+}
+
+async function viewPending(){
+  return `
+  <div class="prem-status">
+    <div class="prem-status-card">
+      <div class="prem-status-icon grey">⏳</div>
+      <div class="prem-status-eyebrow">In Bearbeitung</div>
+      <h2 class="prem-status-title">Account wird verifiziert.</h2>
+      <p class="prem-status-text">Das SMS-Team prüft Ihren Antrag. In der Regel erledigen wir das innerhalb weniger Werktage. Sie werden per E-Mail informiert, sobald der Zugang freigeschaltet ist.</p>
+      <button class="prem-btn prem-btn-ghost" onclick="doLogout()">Abmelden</button>
+    </div>
+  </div>`;
+}
+
+async function viewAgb(){
+  window.__afterRender = () => {
+    const cb = document.getElementById('agbCheck');
+    const btn = document.getElementById('agbAccept');
+    cb.addEventListener('change', () => { btn.disabled = !cb.checked; });
+    btn.addEventListener('click', async () => {
+      if (!cb.checked) return;
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      if (isDemoMode()){
+        me.agb_accepted_at = new Date().toISOString();
+        me.agb_version = AGB_VERSION;
+        const email = localStorage.getItem(DEMO_KEY);
+        if (email && DEMO_USERS[email]){ DEMO_USERS[email].data.agb_accepted_at = me.agb_accepted_at; DEMO_USERS[email].data.agb_version = AGB_VERSION; }
+        setTimeout(() => route(me.role === 'admin' ? 'admin' : 'members'), 400);
+        return;
+      }
+      const { error } = await supa.from('members')
+        .update({ agb_accepted_at: new Date().toISOString(), agb_version: AGB_VERSION })
+        .eq('id', me.id);
+      if (error){
+        btn.disabled = false; btn.textContent = 'Akzeptieren & fortfahren';
+        alert('Speichern fehlgeschlagen: ' + error.message);
+        return;
+      }
+      await loadMe();
+      route(me.role === 'admin' ? 'admin' : 'members');
+    });
+  };
+  return `
+  <div class="prem-agb">
+    <div class="prem-agb-shell">
+      <div class="prem-agb-head">
+        <div class="prem-agb-eyebrow">Allgemeine Geschäftsbedingungen</div>
+        <h1 class="prem-agb-title">Nutzungsbedingungen <em>bestätigen.</em></h1>
+        <p class="prem-agb-sub">Bevor Sie den Mitgliederbereich betreten können, bitten wir Sie um Bestätigung der AGB des Kundenbindungsprogramms.</p>
+      </div>
+      <div class="prem-agb-scroll">
+        <h3>§ 1 Geltungsbereich und Programmbeschreibung</h3>
+        <p>Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB“) regeln die Teilnahme am Kundenbindungsprogramm <strong>„Michas Knock Knock Club“</strong> (nachfolgend „Programm“) der SMS Speditions Management Service GmbH, Luftfrachtzentrum 610 / 2, 70629 Stuttgart-Flughafen, sowie der mit ihr verbundenen Unternehmen [Rudolph Airtransfracht GmbH, CSP STR, CSP FRA, LTS – ggf. anpassen] (nachfolgend gemeinsam „SMS“ oder „wir“).</p>
+        <p>Im Rahmen des Programms erhalten teilnehmende Kundenunternehmen für die Beauftragung von Transport- und Logistikleistungen bei SMS Bonuspunkte („Coins“). Diese Coins können nach Maßgabe dieser AGB gegen Sachprämien (Merchandise) eingelöst oder zur Reduzierung des Rechnungsbetrags künftiger Transportleistungen (Rabatt bzw. Zuzahlungsmodell) verwendet werden.</p>
+        <p>Das Programm richtet sich ausschließlich an Geschäftskunden (B2B) im Sinne von § 14 BGB. Verbraucher im Sinne von § 13 BGB sind von der Teilnahme ausgeschlossen.</p>
+
+        <h3>§ 2 Teilnahmeberechtigung und Kundenkonto</h3>
+        <p>Teilnahmeberechtigt sind ausschließlich Unternehmen, die mit SMS in laufender Geschäftsbeziehung stehen und ein gültiges Transportvertragsverhältnis unterhalten.</p>
+        <p>Die Teilnahme erfolgt durch Registrierung eines unternehmensbezogenen Kundenkontos. Coins werden ausschließlich diesem Unternehmenskonto gutgeschrieben und sind nicht auf einzelne Mitarbeiter, Ansprechpartner oder sonstige natürliche Personen des Kundenunternehmens übertragbar oder personalisierbar.</p>
+        <p>Über die Verwendung und Einlösung der Coins entscheidet allein das teilnehmende Unternehmen bzw. die von ihm hierzu autorisierten Personen (z. B. Einkauf, Geschäftsführung). SMS stellt hierfür ein Kundenportal zur Verfügung, dessen Zugangsdaten vom Kundenunternehmen zu verwalten sind.</p>
+
+        <h3>§ 3 Erwerb von Coins</h3>
+        <p>Für jeden von SMS abgerechneten und beglichenen Transportauftrag erhält das Kundenunternehmen Coins gemäß der jeweils gültigen Coin-Tabelle (abrufbar im Mitgliederbereich unter „Coins“). SMS behält sich vor, die Höhe der Gutschrift je Auftragsart, Volumen oder Relation unterschiedlich zu gestalten.</p>
+        <p>Ein Anspruch auf eine bestimmte Höhe der Coin-Gutschrift besteht nicht; SMS kann die Bewertungstabelle mit Wirkung für die Zukunft anpassen. Bereits gutgeschriebene Coins bleiben von einer solchen Anpassung unberührt.</p>
+        <p>Coins werden erst nach vollständigem Zahlungseingang der zugrunde liegenden Transportrechnung gutgeschrieben. Bei Stornierung, Reklamation oder Gutschrift des zugrunde liegenden Transportauftrags werden die entsprechenden Coins anteilig oder vollständig wieder abgezogen.</p>
+
+        <h3>§ 4 Einlösung von Coins</h3>
+        <p><strong>4.1 Sachprämien (Merchandise).</strong> Coins können im Rahmen des von SMS bereitgestellten Prämienshops gegen dort aufgeführte Sachprämien eingetauscht werden. Der jeweils erforderliche Coin-Betrag je Prämie ergibt sich aus der aktuellen Shop-Darstellung.</p>
+        <p><strong>4.2 Rabatte / Zuzahlungsmodell.</strong> Alternativ können Coins zur Reduzierung des Rechnungsbetrags künftiger Transportaufträge eingesetzt werden, entweder als unmittelbarer Rabatt oder in Kombination mit einer Zuzahlung des Restbetrags in Coins gemäß der im Kundenportal ausgewiesenen Umrechnung.</p>
+        <p><strong>4.3 Allgemeine Einlösebedingungen.</strong></p>
+        <ul>
+          <li>Die Einlösung erfolgt ausschließlich über das Kundenkonto des teilnehmenden Unternehmens.</li>
+          <li>Eine Auszahlung von Coins in Bargeld oder eine Übertragung auf Dritte (auch nicht auf andere Konzern- oder Tochterunternehmen des Kunden) ist ausgeschlossen.</li>
+          <li>Der Umtausch bereits eingelöster Prämien oder Rabatte ist ausgeschlossen, soweit gesetzliche Gewährleistungsrechte nicht entgegenstehen.</li>
+        </ul>
+
+        <h3>§ 5 Wertigkeit, Gültigkeit und Verfall der Coins</h3>
+        <p>Coins besitzen keinen Bargeldwert und sind nicht handelbar. Sie dienen ausschließlich der Einlösung im Rahmen dieses Programms.</p>
+        <p>Coins verfallen 24 Monate nach ihrer Gutschrift, sofern sie nicht zuvor eingelöst wurden. SMS informiert das Kundenunternehmen über das Kundenportal in angemessenem Vorlauf über einen bevorstehenden Verfall.</p>
+        <p>Bei Beendigung der Geschäftsbeziehung zwischen SMS und dem Kundenunternehmen verfallen zu diesem Zeitpunkt noch nicht eingelöste Coins ersatzlos, sofern nicht gesetzlich zwingend etwas anderes gilt.</p>
+
+        <h3>§ 6 Compliance und Offenlegung</h3>
+        <p>Das Programm richtet sich an das teilnehmende Kundenunternehmen als Vertragspartner, nicht an einzelne bei diesem Unternehmen beschäftigte oder tätige Personen. Coins und daraus resultierende Vorteile stehen ausschließlich dem Kundenunternehmen als juristischer Person zu.</p>
+        <p>Das teilnehmende Unternehmen sichert zu, dass die Teilnahme am Programm sowie die Verwendung der Coins im Einklang mit seinen eigenen internen Compliance- und Antikorruptionsrichtlinien erfolgt, und wird die Teilnahme intern gegenüber den jeweils zuständigen Stellen (z. B. Compliance, Einkauf) transparent machen, sofern die eigenen Richtlinien dies vorsehen.</p>
+        <p>SMS behält sich vor, Kundenunternehmen von der weiteren Teilnahme auszuschließen, wenn konkrete Anhaltspunkte dafür vorliegen, dass Coins entgegen ihrer Zweckbestimmung einzelnen Mitarbeitern des Kundenunternehmens persönlich zugewendet oder zugerechnet werden sollen.</p>
+
+        <h3>§ 7 Änderung, Aussetzung und Beendigung des Programms</h3>
+        <p>SMS kann das Programm sowie diese AGB mit Wirkung für die Zukunft ändern, sofern die Änderung für das Kundenunternehmen zumutbar ist. Über wesentliche Änderungen wird SMS mit angemessener Frist (mindestens vier Wochen) vor Inkrafttreten informieren.</p>
+        <p>SMS ist berechtigt, das Programm insgesamt mit einer Frist von drei Monaten zum Ende eines Kalenderjahres einzustellen. Zu diesem Zeitpunkt noch bestehende Coins können innerhalb einer Nachfrist von drei Monaten eingelöst werden; danach verfallen sie ersatzlos.</p>
+        <p>Ein außerordentliches Aussetzen oder Beenden des Programms aus wichtigem Grund (z. B. Missbrauch, rechtliche Bedenken, Änderung der Rechtslage) bleibt unberührt.</p>
+
+        <h3>§ 8 Haftung</h3>
+        <p>SMS haftet unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie nach Maßgabe des Produkthaftungsgesetzes. Für leichte Fahrlässigkeit haftet SMS nur bei Verletzung einer wesentlichen Vertragspflicht (Kardinalpflicht) und begrenzt auf den vertragstypisch vorhersehbaren Schaden.</p>
+        <p>Für die Verfügbarkeit des Prämienshops sowie einzelner Prämien übernimmt SMS keine Gewähr; ein Anspruch auf eine bestimmte Prämie besteht nicht, solange der Vorrat reicht.</p>
+
+        <h3>§ 9 Datenschutz</h3>
+        <p>Die im Rahmen des Programms verarbeiteten personenbezogenen Daten (z. B. Namen von Ansprechpartnern, Kontaktdaten) werden ausschließlich zur Durchführung des Programms sowie zur Kommunikation mit dem Kundenunternehmen verarbeitet. Nähere Informationen ergeben sich aus der <a class="prem-link-quiet" onclick="route('datenschutz')">Datenschutzerklärung</a> von SMS.</p>
+
+        <h3>§ 10 Schlussbestimmungen</h3>
+        <p>Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts (CISG).</p>
+        <p>Gerichtsstand für alle Streitigkeiten aus oder im Zusammenhang mit diesem Programm ist, soweit gesetzlich zulässig, Stuttgart.</p>
+        <p>Sollte eine Bestimmung dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen hiervon unberührt. An die Stelle der unwirksamen Bestimmung tritt die gesetzliche Regelung.</p>
+      </div>
+
+      <label class="prem-agb-check-row" for="agbCheck">
+        <input type="checkbox" id="agbCheck">
+        <span class="prem-agb-check-label">Ich habe die vorstehenden Allgemeinen Geschäftsbedingungen zur Kenntnis genommen und akzeptiere diese für mein Unternehmen als Vertragsgrundlage der Teilnahme am Programm.</span>
+      </label>
+
+      <div class="prem-agb-actions">
+        <button class="prem-btn prem-btn-ghost" onclick="doLogout()">Abmelden</button>
+        <button class="prem-btn prem-btn-orange" id="agbAccept" disabled>Akzeptieren &amp; fortfahren</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function viewMembers(){
+  const anns = isDemoMode() ? DEMO_ANNOUNCEMENTS.filter(a => a.is_active) : ((await supa.from('announcements').select('*').eq('is_active', true).order('created_at',{ascending:false})).data || []);
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Clubhaus</div>
+    <h1>Servus, <em>${me.first_name || ''}.</em></h1>
+    <p class="prem-hero-lead">Willkommen zurück in Michas Knock Knock Club. Coins verdienen, Prämien einlösen, Angebote nutzen.</p>
+  </section>
+  <div class="prem-section">
+    <div class="prem-balance">
+      <div class="prem-balance-coin">MC</div>
+      <div class="prem-balance-body">
+        <div class="prem-balance-label">Aktueller Saldo</div>
+        <div class="prem-balance-num">${fmtNum(me.coins || 0)} MC</div>
+        <div class="prem-balance-meta">≈ ${fmtEur((me.coins||0)*3)} Shop-Wert · 1 MC = 3 €</div>
+      </div>
+    </div>
+    ${anns.length > 0 ? `
+      <div class="prem-section-head" style="margin-bottom:22px;">
+        <div class="prem-section-eyebrow">Aktuelle Challenges</div>
+        <h2>Was gerade <em>läuft.</em></h2>
+      </div>
+      <div class="prem-challenges">
+        ${anns.map(a => `
+          <div class="prem-challenge">
+            <div class="prem-challenge-eyebrow">Challenge</div>
+            <div class="prem-challenge-title">${a.title}</div>
+            <div class="prem-challenge-desc">${a.description || ''}</div>
+            ${a.reward ? `<div class="prem-challenge-reward">
+              <span class="prem-challenge-reward-label">Prämie</span>
+              <span class="prem-challenge-reward-value">${a.reward}</span>
+            </div>` : ''}
+            ${a.deadline ? `<div class="prem-challenge-deadline">Bis ${fmtDay(a.deadline)}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+    <div class="prem-section-head" style="margin-top:40px;">
+      <div class="prem-section-eyebrow">Was möchten Sie tun?</div>
+      <h2>Ihre <em>Bereiche.</em></h2>
+    </div>
+    <div class="prem-tiles">
+      <div class="prem-tile" onclick="route('coins')">
+        <div class="prem-tile-eyebrow">Coins verdienen</div>
+        <h3>Maverick Coins</h3>
+        <p>Auftrag einreichen, Coins vom SMS-Team freischalten lassen. 1 MC = 3 € Shop-Wert.</p>
+        <span class="prem-tile-cta">Coins verwalten</span>
+      </div>
+      <div class="prem-tile" onclick="route('shop')">
+        <div class="prem-tile-eyebrow">Prämien einlösen</div>
+        <h3>SMS Merch-Shop</h3>
+        <p>Original SMS-Produkte mit Ihren Coins bezahlen. Kleidung, Büro, Tech.</p>
+        <span class="prem-tile-cta">Zum Shop</span>
+      </div>
+      <div class="prem-tile" onclick="route('codes')">
+        <div class="prem-tile-eyebrow">Exklusiv</div>
+        <h3>Family &amp; Friends</h3>
+        <p>Vergünstigte Preise bei Bikera &amp; Johansson — bis zu 70 % unter UVP.</p>
+        <span class="prem-tile-cta">Angebote ansehen</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function viewCoins(){
+  const reqs = isDemoMode() ? DEMO_REQUESTS.filter(r => r.member_id === me.id) : ((await supa.from('coin_requests').select('*').eq('member_id', me.id).order('created_at',{ascending:false}).limit(20)).data || []);
+  const txs = isDemoMode() ? DEMO_TRANSACTIONS.filter(t => t.member_id === me.id) : ((await supa.from('coin_transactions').select('*').eq('member_id', me.id).order('created_at',{ascending:false}).limit(30)).data || []);
+  window.__afterRender = () => {
+    const form = document.getElementById('orderForm');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('alert');
+      const orderNumber = document.getElementById('orderNumber').value.trim();
+      const note = document.getElementById('memberNote').value.trim();
+      if (!orderNumber){ a.className='prem-alert error show'; a.textContent='Auftragsnummer fehlt.'; return; }
+      if (isDemoMode()){ a.className='prem-alert coin show'; a.innerHTML='<strong>(Demo)</strong> Antrag übermittelt.'; form.reset(); return; }
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      const { data, error } = await supa.rpc('submit_coin_request', { p_order_number: orderNumber, p_member_note: note });
+      btn.disabled = false; btn.textContent = 'Auftrag einreichen';
+      if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; return; }
+      if (data && data.error){ a.className='prem-alert error show'; a.textContent=data.error; return; }
+      a.className='prem-alert coin show'; a.innerHTML='Antrag übermittelt.';
+      form.reset(); setTimeout(() => route('coins'), 1500);
+    });
+  };
+  const statusLabel = { pending:'Geprüft', approved:'Freigegeben', rejected:'Abgelehnt' };
+  const txLabel = { order_reward:'Auftrag', admin_grant:'Bonus', admin_deduct:'Abzug', shop_purchase:'Shop-Kauf' };
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Coins verdienen</div>
+    <h1>Aufträge <em>einreichen.</em></h1>
+    <p class="prem-hero-lead">Auftragsnummer einreichen — das SMS-Team prüft und schaltet die Coins am Monatsende frei. 1 MC = 3 € Shop-Wert.</p>
+  </section>
+  <div class="prem-section">
+    <div class="prem-balance">
+      <div class="prem-balance-coin">MC</div>
+      <div class="prem-balance-body">
+        <div class="prem-balance-label">Saldo</div>
+        <div class="prem-balance-num">${fmtNum(me.coins || 0)} MC</div>
+        <div class="prem-balance-meta">≈ ${fmtEur((me.coins||0)*3)} Shop-Wert</div>
+      </div>
+    </div>
+    <div class="prem-grid-2">
+      <div class="prem-form-card">
+        <h3>Auftrag einreichen</h3>
+        <p class="hint">Gib die SMS-Auftragsnummer ein. Coins werden i. R. am Monatsende freigeschaltet.</p>
+        <div id="alert" class="prem-alert"></div>
+        <form id="orderForm" class="prem-form">
+          <div>
+            <label class="prem-label">SMS-Auftragsnummer *</label>
+            <input class="prem-input" type="text" id="orderNumber" required placeholder="z.B. SMS-2026-12345">
+          </div>
+          <div>
+            <label class="prem-label">Notiz (optional)</label>
+            <input class="prem-input" type="text" id="memberNote" placeholder="Routenname, Datum">
+          </div>
+          <button type="submit" class="prem-btn prem-btn-coin prem-btn-block" style="margin-top:8px;">Auftrag einreichen</button>
+        </form>
+      </div>
+      <div class="prem-form-card">
+        <h3>So funktioniert es</h3>
+        <ol>
+          <li>SMS-Auftragsnummer einreichen</li>
+          <li>Das SMS-Team prüft die Nummer</li>
+          <li>Coins werden am Monatsende freigeschaltet</li>
+          <li>Höhe abhängig von Auftragsgröße</li>
+          <li><strong>1 MC = 3 € Shop-Wert</strong></li>
+          <li>Kein Bargeldwert, nicht übertragbar</li>
+        </ol>
+      </div>
+    </div>
+    <div class="prem-section-head" style="margin-top:50px;">
+      <div class="prem-section-eyebrow">Ihre Anträge</div>
+      <h2>Eingereichte <em>Aufträge.</em></h2>
+    </div>
+    ${reqs.length === 0 ? '<div class="prem-card" style="text-align:center;color:var(--warm-mid);">Noch keine Aufträge eingereicht.</div>' : `
+      <div class="prem-table-wrap">
+        <table class="prem-table">
+          <thead><tr><th>Eingereicht</th><th>Auftrag</th><th>Notiz</th><th>Status</th><th>Coins</th></tr></thead>
+          <tbody>
+            ${reqs.map(r => `<tr>
+              <td>${fmtDate(r.created_at)}</td>
+              <td><strong>${r.order_number}</strong></td>
+              <td>${r.member_note || '–'}</td>
+              <td><span class="prem-pill ${r.status}">${statusLabel[r.status] || r.status}</span></td>
+              <td>${r.status === 'approved' ? `<strong style="color:var(--coin-dark)">${fmtNum(r.coins_awarded)} MC</strong>` : '–'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    `}
+    ${txs.length > 0 ? `
+      <div class="prem-section-head" style="margin-top:50px;">
+        <div class="prem-section-eyebrow">Bewegungen</div>
+        <h2>Coin-<em>Transaktionen.</em></h2>
+      </div>
+      <div class="prem-table-wrap">
+        <table class="prem-table">
+          <thead><tr><th>Datum</th><th>Art</th><th>Beschreibung</th><th>Coins</th></tr></thead>
+          <tbody>
+            ${txs.map(t => `<tr>
+              <td>${fmtDate(t.created_at)}</td>
+              <td>${txLabel[t.type] || t.type}</td>
+              <td>${t.description || '–'}</td>
+              <td><strong style="color:${t.amount >= 0 ? 'var(--green-dark)' : '#C81E1E'}">${t.amount >= 0 ? '+' : ''}${fmtNum(t.amount)} MC</strong></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    ` : ''}
+  </div>`;
+}
+
+async function viewShop(){
+  const items = isDemoMode() ? DEMO_MERCH : ((await supa.from('merch').select('*').order('category, id')).data || []);
+  const cats = ['all', ...new Set(items.map(i => i.category))];
+  window.__afterRender = () => {
+    document.querySelectorAll('.prem-filter-bar button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.prem-filter-bar button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const cat = b.dataset.cat;
+        document.querySelectorAll('.prem-merch').forEach(card => { card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none'; });
+      });
+    });
+    document.getElementById('merchGrid').addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-id]');
+      if (!btn) return;
+      const id = parseInt(btn.dataset.id);
+      const item = items.find(m => m.id === id);
+      if (!item) return;
+      if (!confirm(`Wirklich "${item.name}" für ${fmtNum(item.coin_price)} MC kaufen?`)) return;
+      const a = document.getElementById('alert');
+      if (isDemoMode()){ a.className='prem-alert success show'; a.innerHTML=`<strong>(Demo)</strong> "${item.name}" für ${fmtNum(item.coin_price)} MC.`; window.scrollTo({top:0,behavior:'smooth'}); return; }
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      const { data, error } = await supa.rpc('purchase_merch', { p_merch_id: id, p_quantity: 1 });
+      if (error){ a.className='prem-alert error show'; a.textContent='Bestellung fehlgeschlagen: '+error.message; btn.disabled=false; btn.textContent=`Mit ${fmtNum(item.coin_price)} MC bezahlen`; return; }
+      if (data && data.error){ a.className='prem-alert error show'; a.textContent=data.error; btn.disabled=false; btn.textContent=`Mit ${fmtNum(item.coin_price)} MC bezahlen`; return; }
+      a.className='prem-alert success show';
+      a.innerHTML=`"${item.name}" gekauft. Neuer Saldo: <strong>${fmtNum(data.remaining_coins)} MC</strong>`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => route('shop'), 1400);
+    });
+  };
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Prämien</div>
+    <h1>SMS <em>Merch.</em></h1>
+    <p class="prem-hero-lead">Original SMS-Produkte — bezahlt mit Ihren Maverick Coins.</p>
+  </section>
+  <div class="prem-section">
+    <div class="prem-balance" style="margin-bottom:24px;">
+      <div class="prem-balance-coin">MC</div>
+      <div class="prem-balance-body">
+        <div class="prem-balance-label">Ihr Saldo</div>
+        <div class="prem-balance-num">${fmtNum(me.coins || 0)} MC</div>
+        <div class="prem-balance-meta">≈ ${fmtEur((me.coins||0)*3)} Shop-Wert</div>
+      </div>
+      <button class="prem-btn prem-btn-coin" onclick="route('coins')">+ Mehr Coins</button>
+    </div>
+    <div id="alert" class="prem-alert"></div>
+    <div class="prem-filter-bar">${cats.map((c,i) => `<button class="${i===0?'active':''}" data-cat="${c}">${c === 'all' ? 'Alle' : c}</button>`).join('')}</div>
+    <div id="merchGrid" class="prem-merch-grid">
+      ${items.map(i => {
+        const tooLow = (me.coins || 0) < i.coin_price;
+        const out = i.stock <= 0;
+        return `<div class="prem-merch" data-cat="${i.category}">
+          <div class="prem-merch-img">${i.emoji || '\u{1F4E6}'}</div>
+          <div class="prem-merch-body">
+            <div class="prem-merch-cat">${i.category}</div>
+            <h3>${i.name}</h3>
+            <div class="prem-merch-desc">${i.description || ''}</div>
+            <div class="prem-merch-foot">
+              <span class="prem-merch-price"><span style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffdd6b,var(--coin) 70%,var(--coin-dark));display:inline-block;"></span> ${fmtNum(i.coin_price)}</span>
+              <span class="prem-merch-stock">${i.stock} Lager</span>
+            </div>
+            <button class="prem-btn prem-btn-orange prem-btn-block prem-btn-sm" style="margin-top:12px;" data-id="${i.id}" ${(out || tooLow) ? 'disabled' : ''}>${out ? 'Ausverkauft' : (tooLow ? 'Zu wenig MC' : `Mit ${fmtNum(i.coin_price)} MC bezahlen`)}</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+async function viewCodes(){
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Exklusiv für Mitglieder</div>
+    <h1>Family &amp; <em>Friends.</em></h1>
+    <p class="prem-hero-lead">Vergünstigte Preise auf ausgewählte Produkte — nur für Mitglieder des Knock Knock Clubs.</p>
+  </section>
+  <div class="prem-section">
+    <div class="prem-mega" onclick="route('bikera')">
+      <div>
+        <div class="prem-mega-label">Mega-Angebot 2026</div>
+        <h2>Bikera &amp; Johansson <em>Family &amp; Friends.</em></h2>
+        <p>Bis zu 70 % unter UVP. E-Bikes, Cargo-Bikes, Trekking-Räder — über 20 Modelle im Programm.</p>
+      </div>
+      <div class="prem-mega-arrow">→</div>
+    </div>
+  </div>`;
+}
+
+async function viewBikera(){
+  const bikes = isDemoMode() ? DEMO_BIKES : ((await supa.from('bikera_products').select('*').order('brand, name')).data || []);
+  const cats = ['all', ...new Set(bikes.map(b => b.category))];
+  window.__afterRender = () => {
+    document.querySelectorAll('.prem-filter-bar button').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.prem-filter-bar button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const cat = b.dataset.cat;
+        document.querySelectorAll('.prem-bike').forEach(card => { card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none'; });
+      });
+    });
+  };
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Bikera &amp; Johansson</div>
+    <h1>Family &amp; <em>Friends.</em></h1>
+    <p class="prem-hero-lead">Family &amp; Friends-Preise 2026 — exklusiv für SMS-Mitglieder.</p>
+  </section>
+  <div class="prem-section">
+    <div class="prem-hint">
+      <strong>Hinweis</strong>
+      Family &amp; Friends-Preise nur für Knock-Knock-Club-Mitglieder. Bestellung per Mail an <a href="mailto:info@sms-airport.de">info@sms-airport.de</a>.
+    </div>
+    <div class="prem-filter-bar">${cats.map((c,i) => `<button class="${i===0?'active':''}" data-cat="${c}">${c === 'all' ? 'Alle' : c}</button>`).join('')}</div>
+    <div class="prem-bike-grid">
+      ${bikes.map(b => {
+        const saving = b.uvp_eur ? Math.round((1 - b.ff_price_eur / b.uvp_eur) * 100) : 0;
+        const img = bikeImage(b.name);
+        return `<div class="prem-bike" data-cat="${b.category}">
+          ${img ? `<div class="prem-bike-img"><img src="${img}" alt="${b.name}" onerror="this.parentElement.style.display='none'"></div>` : ''}
+          <div class="prem-bike-body">
+            <span class="prem-bike-tag ${b.brand.toLowerCase()}">${b.brand}</span>
+            <h4>${b.name}</h4>
+            <div class="prem-bike-variant">${b.variant || ''}</div>
+            ${b.motor ? `<div class="prem-bike-motor">⚡ ${b.motor}</div>` : ''}
+            <div class="prem-bike-prices">
+              ${b.uvp_eur ? `<span class="prem-bike-uvp">UVP ${fmtEur(b.uvp_eur)}</span>` : ''}
+              <span class="prem-bike-ff">${fmtEur(b.ff_price_eur)}</span>
+              ${saving > 0 ? `<span class="prem-bike-save">−${saving}%</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+async function viewAdmin(){
+  const members = isDemoMode() ? DEMO_MEMBERS : ((await supa.from('members').select('*').order('created_at',{ascending:false})).data || []);
+  const reqs = isDemoMode() ? DEMO_REQUESTS : ((await supa.from('coin_requests').select('id, order_number, member_note, status, coins_awarded, created_at, member:member_id(first_name, last_name, email)').order('created_at',{ascending:false}).limit(40)).data || []);
+  const txs = isDemoMode() ? DEMO_TRANSACTIONS : ((await supa.from('coin_transactions').select('id, amount, type, description, order_number, created_at, member:member_id(first_name, last_name, email)').order('created_at',{ascending:false}).limit(40)).data || []);
+  const anns = isDemoMode() ? DEMO_ANNOUNCEMENTS : ((await supa.from('announcements').select('*').order('created_at',{ascending:false})).data || []);
+  const pendingM = members.filter(m => m.status === 'pending').length;
+  const pendingR = reqs.filter(r => r.status === 'pending').length;
+  const totalCoins = members.reduce((s,m) => s + (m.coins||0), 0);
+  const memberOptions = members.filter(m => m.role !== 'admin').map(m => `<option value="${m.id}">${m.first_name} ${m.last_name} — ${m.email} (${fmtNum(m.coins||0)} MC)</option>`).join('');
+  window.__afterRender = () => {
+    document.getElementById('membersBody')?.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+      const a = document.getElementById('alert');
+      if (isDemoMode()){ a.className='prem-alert success show'; a.textContent=`(Demo) Mitglied ${action === 'approve' ? 'freigeschaltet' : 'abgelehnt'}.`; return; }
+      btn.disabled = true;
+      const member = members.find(m => m.id === id);
+      const updates = action === 'approve' ? { status: 'approved', approved_at: new Date().toISOString() } : { status: 'rejected' };
+      const { error } = await supa.from('members').update(updates).eq('id', id);
+      if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; btn.disabled=false; return; }
+      if (action === 'approve' && member){
+        try { await fetch('/api/notify-approval', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email: member.email, firstName: member.first_name }) }); } catch(e){}
+      }
+      a.className='prem-alert success show';
+      a.textContent = action === 'approve' ? 'Freigeschaltet.' : 'Abgelehnt.';
+      setTimeout(() => route('admin'), 900);
+    });
+    document.getElementById('reqBody')?.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-req]');
+      if (!btn) return;
+      const reqId = parseInt(btn.dataset.req);
+      const action = btn.dataset.action;
+      const a = document.getElementById('alert');
+      let coins = 0;
+      if (action === 'approve'){
+        const input = document.querySelector(`input[data-req-input="${reqId}"]`);
+        coins = parseInt(input?.value || '0');
+        if (!coins || coins <= 0){ a.className='prem-alert error show'; a.textContent='Bitte gültige Coin-Anzahl eingeben.'; return; }
+      }
+      if (isDemoMode()){ a.className='prem-alert success show'; a.textContent = action === 'approve' ? `(Demo) ${coins} MC freigegeben.` : '(Demo) Abgelehnt.'; return; }
+      btn.disabled = true;
+      const { data, error } = await supa.rpc('review_coin_request', { p_request_id: reqId, p_action: action, p_coins: coins, p_admin_note: '' });
+      if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; btn.disabled=false; return; }
+      if (data && data.error){ a.className='prem-alert error show'; a.textContent=data.error; btn.disabled=false; return; }
+      a.className='prem-alert success show';
+      a.textContent = action === 'approve' ? `${coins} MC freigegeben.` : 'Abgelehnt.';
+      setTimeout(() => route('admin'), 800);
+    });
+    document.getElementById('coinGrantForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('alert');
+      const memberId = document.getElementById('grantMember').value;
+      const amount = parseInt(document.getElementById('grantAmount').value);
+      const desc = document.getElementById('grantDesc').value.trim();
+      if (!memberId){ a.className='prem-alert error show'; a.textContent='Mitglied wählen.'; return; }
+      if (!amount || amount === 0){ a.className='prem-alert error show'; a.textContent='Anzahl darf nicht 0 sein.'; return; }
+      if (isDemoMode()){ a.className='prem-alert success show'; a.textContent=`(Demo) ${amount > 0 ? '+' : ''}${fmtNum(amount)} MC gebucht.`; e.target.reset(); return; }
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      const { data, error } = await supa.rpc('admin_grant_coins', { p_member_id: memberId, p_amount: amount, p_description: desc || 'Bonus' });
+      btn.disabled = false; btn.textContent = 'Coins buchen';
+      if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; return; }
+      if (data && data.error){ a.className='prem-alert error show'; a.textContent=data.error; return; }
+      a.className='prem-alert success show'; a.textContent=`${amount > 0 ? '+' : ''}${fmtNum(amount)} MC gebucht.`;
+      e.target.reset();
+      setTimeout(() => route('admin'), 900);
+    });
+    document.getElementById('announcementForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = document.getElementById('alert');
+      const title = document.getElementById('annTitle').value.trim();
+      const description = document.getElementById('annDesc').value.trim();
+      const reward = document.getElementById('annReward').value.trim();
+      const deadline = document.getElementById('annDeadline').value || null;
+      if (!title || !description){ a.className='prem-alert error show'; a.textContent='Titel und Beschreibung Pflicht.'; return; }
+      if (isDemoMode()){
+        DEMO_ANNOUNCEMENTS.unshift({ id: Date.now(), title, description, reward, deadline, is_active:true, created_at: new Date().toISOString() });
+        a.className='prem-alert success show'; a.textContent='(Demo) Challenge veröffentlicht.';
+        e.target.reset(); setTimeout(() => route('admin'), 700); return;
+      }
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+      const { error } = await supa.from('announcements').insert({ title, description, reward, deadline, is_active:true });
+      btn.disabled = false; btn.textContent = 'Veröffentlichen';
+      if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; return; }
+      a.className='prem-alert success show'; a.textContent='Challenge veröffentlicht.';
+      e.target.reset(); setTimeout(() => route('admin'), 700);
+    });
+    document.getElementById('annList')?.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-ann]');
+      if (!btn) return;
+      const id = parseInt(btn.dataset.ann);
+      const act = btn.dataset.act;
+      const a = document.getElementById('alert');
+      if (isDemoMode()){
+        if (act === 'delete'){ const i = DEMO_ANNOUNCEMENTS.findIndex(x => x.id === id); if (i >= 0) DEMO_ANNOUNCEMENTS.splice(i,1); }
+        else if (act === 'toggle'){ const x = DEMO_ANNOUNCEMENTS.find(x => x.id === id); if (x) x.is_active = !x.is_active; }
+        a.className='prem-alert success show'; a.textContent='(Demo) aktualisiert.';
+        setTimeout(() => route('admin'), 500); return;
+      }
+      if (act === 'delete'){
+        if (!confirm('Challenge wirklich löschen?')) return;
+        const { error } = await supa.from('announcements').delete().eq('id', id);
+        if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; return; }
+      } else if (act === 'toggle'){
+        const row = anns.find(x => x.id === id);
+        const { error } = await supa.from('announcements').update({ is_active: !row.is_active }).eq('id', id);
+        if (error){ a.className='prem-alert error show'; a.textContent='Fehler: '+error.message; return; }
+      }
+      a.className='prem-alert success show'; a.textContent='Aktualisiert.';
+      setTimeout(() => route('admin'), 500);
+    });
+  };
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Verwaltung</div>
+    <h1>Admin <em>Panel.</em></h1>
+    <p class="prem-hero-lead">Mitglieder verifizieren, Coin-Anträge prüfen, Bonus vergeben, Challenges veröffentlichen.</p>
+  </section>
+  <div class="prem-section">
+    <div id="alert" class="prem-alert"></div>
+    <div class="prem-grid-4" style="margin-bottom:40px;">
+      <div class="prem-card" style="text-align:center;">
+        <div class="prem-tile-eyebrow">Mitglieder</div>
+        <div style="font-family:var(--font-serif);font-size:44px;color:var(--warm-dark);line-height:1;">${fmtNum(members.length)}</div>
+      </div>
+      <div class="prem-card" style="text-align:center;">
+        <div class="prem-tile-eyebrow">Account-Anträge</div>
+        <div style="font-family:var(--font-serif);font-size:44px;color:var(--orange-dark);line-height:1;">${fmtNum(pendingM)}</div>
+      </div>
+      <div class="prem-card" style="text-align:center;">
+        <div class="prem-tile-eyebrow">Coin-Anträge</div>
+        <div style="font-family:var(--font-serif);font-size:44px;color:var(--coin-dark);line-height:1;">${fmtNum(pendingR)}</div>
+      </div>
+      <div class="prem-card" style="text-align:center;">
+        <div class="prem-tile-eyebrow">MC im Umlauf</div>
+        <div style="font-family:var(--font-serif);font-size:44px;color:var(--green-darker);line-height:1;">${fmtNum(totalCoins)}</div>
+      </div>
+    </div>
+
+    <div class="prem-section-head">
+      <div class="prem-section-eyebrow">Challenges</div>
+      <h2>Neue Challenge <em>veröffentlichen.</em></h2>
+    </div>
+    <div class="prem-compose">
+      <form id="announcementForm" class="prem-form">
+        <div>
+          <label class="prem-label">Titel *</label>
+          <input class="prem-input" type="text" id="annTitle" required placeholder="z.B. Pharma-Champion Juli">
+        </div>
+        <div>
+          <label class="prem-label">Beschreibung *</label>
+          <textarea id="annDesc" required placeholder="Was ist zu tun?"></textarea>
+        </div>
+        <div class="prem-form-grid">
+          <div>
+            <label class="prem-label">Prämie</label>
+            <input class="prem-input" type="text" id="annReward" placeholder="z.B. 98 Zoll OLED Fernseher">
+          </div>
+          <div>
+            <label class="prem-label">Deadline (optional)</label>
+            <input class="prem-input" type="date" id="annDeadline">
+          </div>
+        </div>
+        <button type="submit" class="prem-btn prem-btn-orange" style="align-self:flex-start;">Veröffentlichen</button>
+      </form>
+    </div>
+    ${anns.length > 0 ? `
+      <div id="annList" class="prem-ann-list">
+        ${anns.map(a => `
+          <div class="prem-ann-row ${a.is_active ? '' : 'inactive'}">
+            <div style="flex:1;min-width:220px;">
+              <div class="prem-ann-meta">${a.is_active ? 'Aktiv' : 'Deaktiviert'} · ${fmtDay(a.created_at)}${a.deadline ? ' · bis ' + fmtDay(a.deadline) : ''}</div>
+              <h4>${a.title}</h4>
+              <div style="font-size:13px;color:var(--warm-mid);line-height:1.55;">${a.description || ''}</div>
+              ${a.reward ? `<div class="prem-ann-reward">Prämie: ${a.reward}</div>` : ''}
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="prem-btn prem-btn-ghost prem-btn-sm" data-ann="${a.id}" data-act="toggle">${a.is_active ? 'Deaktivieren' : 'Aktivieren'}</button>
+              <button class="prem-btn prem-btn-danger prem-btn-sm" data-ann="${a.id}" data-act="delete">Löschen</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    <div class="prem-section-head" style="margin-top:50px;">
+      <div class="prem-section-eyebrow">Coin-Anträge</div>
+      <h2>Coin-Anträge <em>prüfen.</em></h2>
+    </div>
+    <div class="prem-table-wrap">
+      <table class="prem-table">
+        <thead><tr><th>Eingereicht</th><th>Mitglied</th><th>Auftrag #</th><th>Notiz</th><th>Status</th><th>Aktion</th></tr></thead>
+        <tbody id="reqBody">
+          ${reqs.length === 0 ? '<tr><td colspan="6" style="text-align:center;color:var(--warm-mid);">Keine Anträge</td></tr>' :
+            reqs.map(r => `<tr>
+              <td>${fmtDate(r.created_at)}</td>
+              <td><strong>${r.member?.first_name||'?'} ${r.member?.last_name||''}</strong><br><span style="font-size:11px;color:var(--warm-mid);">${r.member?.email||''}</span></td>
+              <td><strong>${r.order_number}</strong></td>
+              <td>${r.member_note || '–'}</td>
+              <td><span class="prem-pill ${r.status}">${r.status}</span>${r.status === 'approved' ? `<br><span style="font-size:11px;color:var(--coin-dark);font-weight:700;">+${r.coins_awarded} MC</span>` : ''}</td>
+              <td class="actions">${r.status === 'pending' ? `
+                <input type="number" min="1" placeholder="MC" data-req-input="${r.id}" style="width:70px;padding:6px 8px;border:1px solid var(--cream-line);border-radius:6px;font-size:12px;">
+                <button class="prem-btn prem-btn-coin prem-btn-sm" data-action="approve" data-req="${r.id}">Freigeben</button>
+                <button class="prem-btn prem-btn-danger prem-btn-sm" data-action="reject" data-req="${r.id}">Ablehnen</button>
+              ` : '–'}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prem-section-head" style="margin-top:50px;">
+      <div class="prem-section-eyebrow">Manuell</div>
+      <h2>Bonus-Coins <em>vergeben.</em></h2>
+    </div>
+    <div class="prem-form-card">
+      <p class="hint">Außerhalb der Auftragsbelohnung Coins gutschreiben oder abziehen (negativ = Abzug).</p>
+      <form id="coinGrantForm" class="prem-form">
+        <div>
+          <label class="prem-label">Mitglied</label>
+          <select id="grantMember" required><option value="">— Bitte wählen —</option>${memberOptions}</select>
+        </div>
+        <div class="prem-form-grid">
+          <div>
+            <label class="prem-label">MC (negativ = Abzug)</label>
+            <input class="prem-input" type="number" id="grantAmount" required placeholder="z.B. 50 oder -10">
+          </div>
+          <div>
+            <label class="prem-label">Grund</label>
+            <input class="prem-input" type="text" id="grantDesc" placeholder="z.B. Sommerfest-Bonus">
+          </div>
+        </div>
+        <button type="submit" class="prem-btn prem-btn-primary" style="align-self:flex-start;">Coins buchen</button>
+      </form>
+    </div>
+
+    <div class="prem-section-head" style="margin-top:50px;">
+      <div class="prem-section-eyebrow">Übersicht</div>
+      <h2>Alle <em>Mitglieder.</em></h2>
+    </div>
+    <div class="prem-table-wrap">
+      <table class="prem-table">
+        <thead><tr><th>Name</th><th>Private E-Mail</th><th>Tel</th><th>Firma</th><th>MC</th><th>Status</th><th>Aktionen</th></tr></thead>
+        <tbody id="membersBody">
+          ${members.map(m => `<tr>
+            <td><strong>${m.first_name || ''} ${m.last_name || ''}</strong></td>
+            <td>${m.private_email || m.email}</td>
+            <td>${m.private_phone || m.phone || '–'}</td>
+            <td>${m.company || '–'}</td>
+            <td style="font-weight:700;color:var(--coin-dark);">${fmtNum(m.coins||0)}</td>
+            <td>${m.role === 'admin' ? '<span class="prem-pill admin">Admin</span>' : `<span class="prem-pill ${m.status}">${m.status}</span>`}</td>
+            <td class="actions">${m.role === 'admin' ? '–' : `
+              ${m.status !== 'approved' ? `<button class="prem-btn prem-btn-coin prem-btn-sm" data-action="approve" data-id="${m.id}">Freischalten</button>` : ''}
+              ${m.status !== 'rejected' ? `<button class="prem-btn prem-btn-danger prem-btn-sm" data-action="reject" data-id="${m.id}">Ablehnen</button>` : ''}
+            `}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    ${txs.length > 0 ? `
+      <div class="prem-section-head" style="margin-top:50px;">
+        <div class="prem-section-eyebrow">Verlauf</div>
+        <h2>Coin-<em>Transaktionen.</em></h2>
+      </div>
+      <div class="prem-table-wrap">
+        <table class="prem-table">
+          <thead><tr><th>Datum</th><th>Mitglied</th><th>Art</th><th>Beschreibung</th><th>MC</th></tr></thead>
+          <tbody>${txs.map(t => `<tr>
+            <td>${fmtDate(t.created_at)}</td>
+            <td>${t.member?.first_name||'?'} ${t.member?.last_name||''}</td>
+            <td>${t.type}</td>
+            <td>${t.description || '–'}</td>
+            <td><strong style="color:${t.amount >= 0 ? 'var(--green-dark)' : '#C81E1E'}">${t.amount >= 0 ? '+' : ''}${fmtNum(t.amount)}</strong></td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    ` : ''}
+  </div>`;
+}
+
+async function viewFaq(){
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">FAQ</div>
+    <h1>Häufige <em>Fragen.</em></h1>
+    <p class="prem-hero-lead">Alles Wichtige zu Michas Knock Knock Club auf einen Blick.</p>
+  </section>
+  <div class="prem-section" style="max-width:820px;">
+    <div class="prem-card" style="margin-bottom:16px;"><h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Was ist Michas Knock Knock Club?</h3><p style="color:var(--warm-mid);line-height:1.65;">Der offizielle Mitgliederbereich der SMS Spedition Management Service GmbH — für Kunden, Partner und Freunde des Hauses.</p></div>
+    <div class="prem-card" style="margin-bottom:16px;"><h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Was sind Maverick Coins?</h3><p style="color:var(--warm-mid);line-height:1.65;">Die interne Treuewährung. 1 MC = 3 € Shop-Wert. Verdient wird durch SMS-Aufträge.</p></div>
+    <div class="prem-card" style="margin-bottom:16px;"><h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Wer kann Mitglied werden?</h3><p style="color:var(--warm-mid);line-height:1.65;">Alle Geschäftskunden, die mit SMS in laufender Geschäftsbeziehung stehen.</p></div>
+    <div class="prem-card" style="margin-bottom:16px;"><h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Was kostet die Mitgliedschaft?</h3><p style="color:var(--warm-mid);line-height:1.65;">Nichts — kostenfrei und ohne Mindestlaufzeit.</p></div>
+    <div class="prem-card" style="margin-bottom:16px;"><h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Wie kündige ich?</h3><p style="color:var(--warm-mid);line-height:1.65;">Kurze E-Mail an info@sms-airport.de mit dem Betreff „Mitgliedschaft kündigen“.</p></div>
+  </div>`;
+}
+
+async function viewImpressum(){
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Rechtliches</div>
+    <h1><em>Impressum.</em></h1>
+  </section>
+  <div class="prem-section" style="max-width:820px;">
+    <div class="prem-card">
+      <h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Angaben gemäß § 5 TMG</h3>
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:18px;"><strong>SMS Spedition Management Service GmbH</strong><br>Luftfrachtzentrum 610 / 2<br>70629 Stuttgart-Flughafen</p>
+      <h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Kontakt</h3>
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:18px;">Telefon: 0711 / 794700-0<br>Fax: 0711 / 794700-21<br>E-Mail: <a class="prem-link-quiet" href="mailto:info@sms-airport.de">info@sms-airport.de</a></p>
+      <h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Vertreten durch</h3>
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:18px;">Geschäftsführer: Michael Weber</p>
+      <h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Register</h3>
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:18px;">Registergericht Stuttgart, HRB 224559<br>USt-ID: DE197024288</p>
+      <h3 style="font-family:var(--font-serif);font-weight:400;font-size:20px;color:var(--warm-dark);margin-bottom:8px;">Hinweis zu Maverick Coins</h3>
+      <p style="color:var(--warm-dark);line-height:1.75;">Maverick Coins (MC) sind eine fiktive interne Treuewährung. 1 MC = 3 € Shop-Wert. Kein Bargeldwert, nicht übertragbar, nicht in Geld umtauschbar.</p>
+    </div>
+  </div>`;
+}
+
+async function viewDatenschutz(){
+  return `
+  <section class="prem-hero">
+    <div class="prem-eyebrow">Rechtliches</div>
+    <h1><em>Datenschutz.</em></h1>
+  </section>
+  <div class="prem-section" style="max-width:820px;">
+    <div class="prem-card">
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:14px;">Verantwortlich: SMS Spedition Management Service GmbH, Luftfrachtzentrum 610 / 2, 70629 Stuttgart-Flughafen.</p>
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:14px;">Daten werden in Supabase (EU, Stockholm) gespeichert. E-Mail-Versand über Brevo (EU).</p>
+      <p style="color:var(--warm-dark);line-height:1.75;margin-bottom:14px;">Bei Registrierung erheben wir: Name, Anschrift, Firma, private E-Mail, private Telefonnummer. Zusätzlich Auftragsnummern und Coin-Saldo im Rahmen der Programmteilnahme.</p>
+      <p style="color:var(--warm-dark);line-height:1.75;">Rechte auf Auskunft, Berichtigung, Löschung und Datenübertragbarkeit können jederzeit per E-Mail an <a class="prem-link-quiet" href="mailto:info@sms-airport.de">info@sms-airport.de</a> geltend gemacht werden.</p>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   BOOTSTRAP
+   ============================================================ */
+(async () => {
+  window.addEventListener('hashchange', () => { const p = window.location.hash.replace('#','') || 'home'; route(p); });
+  supa.auth.onAuthStateChange(async (event) => {
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') await loadMe();
+    else if (event === 'SIGNED_OUT'){ if (!isDemoMode()) me = null; }
+  });
+  await loadMe();
+  const hash = window.location.hash.replace('#','');
+  if (hash) route(hash);
+  else if (me && (me.status === 'approved' || me.role === 'admin')) route(me.role === 'admin' ? 'admin' : 'members');
+  else if (me) route('pending');
+  else route('home');
+})();
+</script>
+</body>
+</html>
